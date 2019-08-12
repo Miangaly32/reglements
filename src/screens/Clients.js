@@ -1,26 +1,61 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, Text, TouchableOpacity, Alert } from 'react-native';
+import { StyleSheet, View, Text, TouchableOpacity, Alert,FlatList } from 'react-native';
 import { Table, TableWrapper, Row, Cell } from 'react-native-table-component';
 import { Icon } from 'react-native-elements';
 
 export default class Clients extends Component {
     constructor(props) {
-        super(props);
-        this.state = {
-          tableHead: ['Numero', 'Societe', 'Actions'],
-          tableData: [
-            ['00001', 'Manao', '3' ],
-            ['00002', 'Go Travel', 'c'],
-            ['00003', 'Association Fanamby', '3']
-          ]
-        }
+      super(props);
+      this.state = {
+        tableHead: ['Numero', 'Societe', 'Actions'],
+        tableData: [
+          ['00001', 'Manao', '3' ],
+          ['00002', 'Go Travel', 'c'],
+          ['00003', 'Association Fanamby', '3']
+        ]
       }
+    }
      
     _alertIndex(index) {
     Alert.alert(`This is row ${index + 1}`);
     }
+    
+    componentDidMount(){
+      fetch("http://reglements_local.manao.eu:83/index.php/ws/WSClient/clientsARelancer?ent_num=500002")
+      // fetch("https://jsonplaceholder.typicode.com/users")
+      .then(response => response.json())
+      .then((responseJson)=> {
+        this.setState({
+         loading: false,
+         dataSource: responseJson
+        })
+      })
+      .catch(error=>console.log(error)) //to catch the errors if any
+    }
+
+    FlatListItemSeparator = () => {
+      return (
+        <View style={{
+           height: .5,
+           width:"100%",
+           backgroundColor:"rgba(0,0,0,0.5)",
+      }}
+      />
+      );
+      }
+      renderItem=(data)=>
+      <TouchableOpacity style={styles.list}>
+      <Text style={styles.lightText}>{data.item.clt_numero}</Text>
+      <Text style={styles.lightText}>{data.item.clt_societe}</Text></TouchableOpacity>
      
-    render() {
+      render() {
+        if(this.state.loading){
+        return( 
+          <View style={styles.loader}> 
+            <ActivityIndicator size="large" color="#0c9"/>
+          </View>
+          )}
+
         const state = this.state;
         const element = (data, index) => (
          
@@ -34,7 +69,7 @@ export default class Clients extends Component {
             </View>
          
         );
-     
+
         return (
           <View style={styles.container}>
             <Table borderStyle={{borderColor: 'transparent'}}>
@@ -51,6 +86,13 @@ export default class Clients extends Component {
                 ))
               }
             </Table>
+
+            <FlatList
+              data= {this.state.dataSource}
+              ItemSeparatorComponent = {this.FlatListItemSeparator}
+              renderItem= {item=> this.renderItem(item)}
+              keyExtractor= {item=>item.clt_id.toString()}
+          />
           </View>
         )
     }
@@ -62,5 +104,6 @@ export default class Clients extends Component {
       text: { margin: 6 },
       row: { flexDirection: 'row', backgroundColor: '#FFF1C1' },
       action: { width: 58, height: 18,flexDirection: 'row' },
-      btnText: { textAlign: 'center', color: '#fff' }
+      btnText: { textAlign: 'center', color: '#fff' },
+      list:{paddingVertical: 4, margin: 5,backgroundColor: "#fff"}
     });
