@@ -4,33 +4,24 @@ import { Table, TableWrapper, Row, Cell } from 'react-native-table-component';
 import { Icon } from 'react-native-elements';
 
 export default class Clients extends Component {
+    componentDidMount(){
+      fetch("http://192.168.43.68:83/index.php/ws/WSClient/clientsARelancer?ent_num=500002")
+      .then(response => response.json())
+      .then((responseJson)=> {
+        this.setState({
+          tableHead: ['Numero', 'Societe', 'Actions'],
+          tableData: responseJson
+        })
+      })
+      .catch(error=>console.log(error)) //to catch the errors if any
+    }
+
     constructor(props) {
       super(props);
-      this.state = {
-        tableHead: ['Numero', 'Societe', 'Actions'],
-        tableData: [
-          ['00001', 'Manao', '3' ],
-          ['00002', 'Go Travel', 'c'],
-          ['00003', 'Association Fanamby', '3']
-        ]
-      }
     }
      
     _alertIndex(index) {
     Alert.alert(`This is row ${index + 1}`);
-    }
-    
-    componentDidMount(){
-      fetch("http://reglements_local.manao.eu:83/index.php/ws/WSClient/clientsARelancer?ent_num=500002")
-      // fetch("https://jsonplaceholder.typicode.com/users")
-      .then(response => response.json())
-      .then((responseJson)=> {
-        this.setState({
-         loading: false,
-         dataSource: responseJson
-        })
-      })
-      .catch(error=>console.log(error)) //to catch the errors if any
     }
 
     FlatListItemSeparator = () => {
@@ -42,20 +33,15 @@ export default class Clients extends Component {
       }}
       />
       );
-      }
-      renderItem=(data)=>
-      <TouchableOpacity style={styles.list}>
-      <Text style={styles.lightText}>{data.item.clt_numero}</Text>
-      <Text style={styles.lightText}>{data.item.clt_societe}</Text></TouchableOpacity>
-     
-      render() {
-        if(this.state.loading){
-        return( 
-          <View style={styles.loader}> 
-            <ActivityIndicator size="large" color="#0c9"/>
-          </View>
-          )}
+    }
 
+    // renderItem = (data) =>
+    // <TouchableOpacity style={styles.list}>
+    // <Text style={styles.lightText}>{data.item.clt_numero}</Text>
+    // <Text style={styles.lightText}>{data.item.clt_societe}</Text>
+    // </TouchableOpacity>
+
+    render() {
         const state = this.state;
         const element = (data, index) => (
          
@@ -86,16 +72,16 @@ export default class Clients extends Component {
                 ))
               }
             </Table>
-
+{/* 
             <FlatList
-              data= {this.state.dataSource}
+              data= {this.state.listeclients}
               ItemSeparatorComponent = {this.FlatListItemSeparator}
               renderItem= {item=> this.renderItem(item)}
               keyExtractor= {item=>item.clt_id.toString()}
-          />
+          /> */}
           </View>
         )
-    }
+  }
 }
      
     const styles = StyleSheet.create({

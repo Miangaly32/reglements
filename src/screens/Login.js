@@ -15,10 +15,7 @@ export default class Login extends Component {
     
   login = async() =>{
     const {email,password} = this.state;
-     if (email != null && password != null)
-    {
       Actions.accueil()
-    }
   }
 
 	render() {
