@@ -1,27 +1,22 @@
 import React, { Component } from 'react';
-import { StyleSheet, View,ScrollView, Text, TouchableOpacity, Alert,ActivityIndicator } from 'react-native';
+import { StyleSheet, View, Text, TouchableOpacity, Alert,ActivityIndicator } from 'react-native';
 import { Table, TableWrapper, Row, Cell } from 'react-native-table-component';
-import { Icon,SearchBar  } from 'react-native-elements';
+import { Icon } from 'react-native-elements';
 import call from 'react-native-phone-call';
 
-
-export default class Clients extends Component {
-   
+export default class ClientsRelance extends Component {
     constructor(props) {
         super(props);
         this.state = {
           tableHead: ['Numero', 'Societe', 'Actions'],
           tableData: [[]],
-          fetching_from_server_prev: false,
-          fetching_from_server_next: false,
-          start :0,
-          search: ''
+          fetching_from_server: false
         }
     }
     
     componentDidMount(){
       const GLOBAL = require('../../Global');
-      fetch(GLOBAL.BASE_URL_REG+"WSClient/listeClients?ent_num=500002&start="+this.state.start)
+      fetch(GLOBAL.BASE_URL_REG+"WSClient/clientsARelancer?ent_num=500002")
       .then(response => response.json())
       .then((responseJson)=> {
         this.setState({
@@ -30,57 +25,6 @@ export default class Clients extends Component {
       })
       .catch(error=>console.log(error)) //to catch the errors if any
     }
-
-    prev = () => {
-      const GLOBAL = require('../../Global');
-      this.setState({ fetching_from_server_prev: true , start : this.state.start - 20}, () => {
-      fetch(GLOBAL.BASE_URL_REG+"WSClient/listeClients?ent_num=500002&start="+this.state.start+"&search="+this.state.search)
-          .then(response => response.json())
-          .then(responseJson => {
-            this.setState({
-              tableData: responseJson,
-              fetching_from_server_prev: false
-            });
-          })
-          .catch(error => {
-            console.error(error);
-          });
-      });
-    };
-
-    next = () => {
-        const GLOBAL = require('../../Global');
-        this.setState({ fetching_from_server_next: true , start : this.state.start + 20}, () => {
-        fetch(GLOBAL.BASE_URL_REG+"WSClient/listeClients?ent_num=500002&start="+this.state.start+"&search="+this.state.search)
-            .then(response => response.json())
-            .then(responseJson => {
-              this.setState({
-                tableData: responseJson,
-                fetching_from_server_next: false
-              });
-            })
-            .catch(error => {
-              console.error(error);
-            });
-      });
-    };
-
-    _search = search => {
-      this.setState({ search:search });
-      const GLOBAL = require('../../Global');
-        this.setState({start : 0}, () => {
-        fetch(GLOBAL.BASE_URL_REG+"WSClient/listeClients?ent_num=500002&start="+this.state.start+"&search="+search)
-            .then(response => response.json())
-            .then(responseJson => {
-              this.setState({
-                tableData: responseJson
-              });
-            })
-            .catch(error => {
-              console.error(error);
-            });
-      });
-    };
 
     _alertIndex(data) {
       Alert.alert(data);
@@ -102,7 +46,7 @@ export default class Clients extends Component {
         const state = this.state;
         const element = (data) => (         
             <View style={styles.action}>
-                 <TouchableOpacity onPress={() => this._alertIndex(data)}>
+                <TouchableOpacity onPress={() => this._alertIndex(data)}>
                 <Icon type='ionicon' name='md-eye'/>
                 </TouchableOpacity>
                 <TouchableOpacity style={{marginLeft:20}} onPress={() => this._alertIndex(data)}>
@@ -115,12 +59,7 @@ export default class Clients extends Component {
         );
 
         return (
-          <ScrollView style={styles.container}>
-            <SearchBar
-              placeholder="Rechercher"
-              onChangeText={this._search}
-              value={this.state.search}
-            />
+          <View style={styles.container}>
             <Table borderStyle={{borderColor: 'transparent'}}>
               <Row data={state.tableHead} style={styles.head} textStyle={styles.text}/>
               {
@@ -136,35 +75,26 @@ export default class Clients extends Component {
             <View style={styles.footer}>
               <TouchableOpacity
                 activeOpacity={0.9}
-                onPress={() => this.prev()}
-                style={styles.loadMoreBtn}>
-                <Text style={styles.btnText}>Precedent</Text>
-                {this.state.fetching_from_server_prev ? (
-                  <ActivityIndicator color="white" style={{ marginLeft: 8 }} />
-                ) : null}
-              </TouchableOpacity>
-              <TouchableOpacity
-                activeOpacity={0.9}
-                onPress={() => this.next()}
+                onPress={() => this._alertIndex('load more data')}
+                //On Click of button calling loadMoreData function to load more data
                 style={styles.loadMoreBtn}>
                 <Text style={styles.btnText}>Suivant</Text>
-                {this.state.fetching_from_server_next ? (
+                {this.state.fetching_from_server ? (
                   <ActivityIndicator color="white" style={{ marginLeft: 8 }} />
                 ) : null}
               </TouchableOpacity>
             </View>
-          </ScrollView>
+          </View>
         )
   }
 }
      
     const styles = StyleSheet.create({
-      container: { flex: 1, backgroundColor: '#fff' },
+      container: { flex: 1, padding: 16, paddingTop: 30, backgroundColor: '#fff' },
       head: { height: 40, backgroundColor: '#808B97' },
       text: { margin: 6 },
       row: { flexDirection: 'row', backgroundColor: '#FFF1C1' },
       action: { width: 58, height: 18,flexDirection: 'row' },
-      list:{paddingVertical: 4, margin: 5,backgroundColor: "#fff"},
       footer: {
         padding: 10,
         justifyContent: 'center',

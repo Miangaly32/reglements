@@ -4,6 +4,7 @@ import Login from '../src/screens/Login';
 import Accueil from '../src/screens/Accueil';
 import Factures from '../src/screens/Factures';
 import Clients from '../src/screens/Clients';
+import ClientsRelance from '../src/screens/ClientsRelance';
 import Reglements from '../src/screens/Reglements';
 
 import DrawerContent from './components/DrawerContent';
@@ -39,12 +40,17 @@ export default class Routes extends Component {
                     <Scene 
                         key="factures"
                         component={Factures}
-                        title="Factures impayees"
+                        title="Factures"
                     /> 
                      <Scene 
                         key="clients"
                         component={Clients}
                         title="Clients"
+                    /> 
+                     <Scene 
+                        key="clientsRelance"
+                        component={ClientsRelance}
+                        title="Clients à relancer"
                     /> 
                      <Scene 
                         key="reglements"

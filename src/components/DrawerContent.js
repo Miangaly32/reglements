@@ -5,8 +5,11 @@ export default class DrawerContent extends Component {
 	render() {
         return(
             <ScrollView style={styles.container}>
+                 <TouchableOpacity style={styles.button} onPress={Actions.accueil}>
+                    <Text style={styles.controlText}>Accueil</Text>
+                </TouchableOpacity>
                 <TouchableOpacity style={styles.button} onPress={Actions.factures}>
-                    <Text style={styles.controlText}>Factures impayees</Text>
+                    <Text style={styles.controlText}>Factures</Text>
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.button} onPress={Actions.clients}>
                     <Text style={styles.controlText}>Clients</Text>

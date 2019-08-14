@@ -3,6 +3,7 @@ import { StyleSheet, View,  Picker ,Alert} from 'react-native';
 import FacturesChart from '../components/FacturesChart';
 import { Badge} from 'react-native-elements';
 import {Text,Button} from 'react-native-elements';
+import {Actions} from 'react-native-router-flux';
 
 export default class Accueil extends Component {
     constructor(props) {
@@ -45,12 +46,13 @@ export default class Accueil extends Component {
                 <Text h3>4 clients à relancer</Text>
                 <Text h3 style={{color:'#f0ad4e'}}>9.596.160,00 MGA</Text>
                 <Button
+                onPress={Actions.clientsRelance}
                 title="Voir details"
                 buttonStyle = {{width:100}}
                 />
             </View>  
             <View style={styles.clients}>
-                <Text h3>6 factures d'avoir à regler</Text>
+                <Text h3>6 factures d'avoir à régler</Text>
                 <Text h3 style={{color:'#d9534f'}}>10.200.160,00 MGA</Text>
                 <Button
                 title="Voir details"

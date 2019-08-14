@@ -1,6 +1,7 @@
 import React from 'react'
 import { PieChart } from 'react-native-svg-charts'
 import { Text } from 'react-native-svg'
+import {Actions} from 'react-native-router-flux';
 
 class FacturesChart extends React.PureComponent {
     render() {
@@ -19,7 +20,8 @@ class FacturesChart extends React.PureComponent {
             {
                 key: 3,
                 amount: 40,
-                svg: { fill: '#5cb85c' }
+                svg: { fill: '#5cb85c', onPress: () => Actions.clients() },
+                
             }
         ]
 
@@ -36,7 +38,9 @@ class FacturesChart extends React.PureComponent {
                     alignmentBaseline={'middle'}
                     fontSize={24}
                     stroke={'black'}
-                    strokeWidth={0.2}>
+                    strokeWidth={0.2}
+                    onPress={() => alert('Press on Txt '+index)}
+                    >
                         {data.amount}
                     </Text>
                 )
@@ -46,12 +50,12 @@ class FacturesChart extends React.PureComponent {
         return (
             <PieChart
                 style={{ height: 200 }}
-                valueAccessor={({ item }) => item.amount}
+                valueAccessor={({ item }) => item.amount} // onPress={() => alert('Press on Txt '+index)}
                 data={data}
                 spacing={0}
                 outerRadius={'95%'}
             >
-                <Labels/>
+                <Labels />
                 
             </PieChart>
             
