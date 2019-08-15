@@ -3,9 +3,11 @@ import {Router, Stack, Scene} from 'react-native-router-flux';
 import Login from '../src/screens/Login';
 import Accueil from '../src/screens/Accueil';
 import Factures from '../src/screens/Factures';
+import Facture from '../src/screens/Facture';
 import Clients from '../src/screens/Clients';
 import ClientsRelance from '../src/screens/ClientsRelance';
 import Reglements from '../src/screens/Reglements';
+import SituationClient from '../src/screens/SituationClient';
 
 import DrawerContent from './components/DrawerContent';
 
@@ -25,13 +27,15 @@ export default class Routes extends Component {
                     require('../assets/hamburger.png')
                     }
                 hideNavBar>    
+                <Scene key="root">
                     <Scene key="login"
                         component={Login}
                         title="Login"
                         type="reset"
                         hideNavBar
                         drawerLockMode = {'locked-closed'}
-                        initial />                
+                        initial
+                         />                
                     <Scene 
                         key="accueil"
                         component={Accueil}
@@ -41,6 +45,11 @@ export default class Routes extends Component {
                         key="factures"
                         component={Factures}
                         title="Factures"
+                    /> 
+                     <Scene 
+                        key="facture"
+                        component={Facture}
+                        title="Facture"
                     /> 
                      <Scene 
                         key="clients"
@@ -53,10 +62,16 @@ export default class Routes extends Component {
                         title="Clients à relancer"
                     /> 
                      <Scene 
+                        key="situationClient"
+                        component={SituationClient}
+                        title="Situation client"
+                    /> 
+                    <Scene 
                         key="reglements"
                         component={Reglements}
                         title="Reglements"
                     /> 
+                </Scene>
                 </Scene>
             </Router>
         )

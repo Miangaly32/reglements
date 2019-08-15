@@ -3,7 +3,7 @@ import { StyleSheet, View,ScrollView, Text, TouchableOpacity, Alert,ActivityIndi
 import { Table, TableWrapper, Row, Cell } from 'react-native-table-component';
 import { Icon,SearchBar  } from 'react-native-elements';
 import call from 'react-native-phone-call';
-
+import {Actions} from 'react-native-router-flux';
 
 export default class Clients extends Component {
    
@@ -37,6 +37,7 @@ export default class Clients extends Component {
       fetch(GLOBAL.BASE_URL_REG+"WSClient/listeClients?ent_num=500002&start="+this.state.start+"&search="+this.state.search)
           .then(response => response.json())
           .then(responseJson => {
+            console.log(responseJson.length);
             this.setState({
               tableData: responseJson,
               fetching_from_server_prev: false
@@ -86,6 +87,10 @@ export default class Clients extends Component {
       Alert.alert(data);
     }
 
+    _voirClient(data){
+      Actions.situationClient({clt_id: data})
+    }
+
     _call(number){
       if(number!==''){
         const args = {
@@ -100,22 +105,23 @@ export default class Clients extends Component {
 
     render() {
         const state = this.state;
-        const element = (data) => (         
+        const element = (clt_tel,clt_id,clt_mail) => (         
             <View style={styles.action}>
-                 <TouchableOpacity onPress={() => this._alertIndex(data)}>
+                 <TouchableOpacity onPress={() => this._voirClient(clt_id)}>
                 <Icon type='ionicon' name='md-eye'/>
                 </TouchableOpacity>
-                <TouchableOpacity style={{marginLeft:20}} onPress={() => this._alertIndex(data)}>
+                <TouchableOpacity style={{marginLeft:20}} onPress={() => this._alertIndex(clt_mail)}>
                 <Icon name='mail'/>
                 </TouchableOpacity>
-                <TouchableOpacity style={{marginLeft:20}} onPress={() => this._call(data)}>
+                <TouchableOpacity style={{marginLeft:20}} onPress={() => this._call(clt_tel)}>
                     <Icon  name='call'/> 
                  </TouchableOpacity>
             </View>         
         );
 
         return (
-          <ScrollView style={styles.container}>
+          <ScrollView >
+          <View style={styles.container}>
             <SearchBar
               placeholder="Rechercher"
               onChangeText={this._search}
@@ -128,7 +134,7 @@ export default class Clients extends Component {
                   <TableWrapper key={index} style={styles.row}  > 
                        <Cell key={0} data={rowData.clt_numero} textStyle={styles.text}/>
                        <Cell key={1} data={rowData.clt_societe} textStyle={styles.text}/>
-                       <Cell key={2} data={ element(rowData.clt_tel) } textStyle={styles.text} />
+                       <Cell key={2} data={ element(rowData.clt_tel,rowData.clt_id,rowData.clt_mail) } textStyle={styles.text} />
                   </TableWrapper>
                 ))
               }
@@ -153,6 +159,7 @@ export default class Clients extends Component {
                 ) : null}
               </TouchableOpacity>
             </View>
+            </View>
           </ScrollView>
         )
   }
@@ -161,8 +168,8 @@ export default class Clients extends Component {
     const styles = StyleSheet.create({
       container: { flex: 1, backgroundColor: '#fff' },
       head: { height: 40, backgroundColor: '#808B97' },
-      text: { margin: 6 },
       row: { flexDirection: 'row', backgroundColor: '#FFF1C1' },
+      text: { margin: 6 },
       action: { width: 58, height: 18,flexDirection: 'row' },
       list:{paddingVertical: 4, margin: 5,backgroundColor: "#fff"},
       footer: {

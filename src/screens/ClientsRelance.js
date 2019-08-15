@@ -3,20 +3,20 @@ import { StyleSheet, View, Text, TouchableOpacity, Alert,ActivityIndicator } fro
 import { Table, TableWrapper, Row, Cell } from 'react-native-table-component';
 import { Icon } from 'react-native-elements';
 import call from 'react-native-phone-call';
+import {Actions} from 'react-native-router-flux';
 
 export default class ClientsRelance extends Component {
     constructor(props) {
         super(props);
         this.state = {
           tableHead: ['Numero', 'Societe', 'Actions'],
-          tableData: [[]],
-          fetching_from_server: false
+          tableData: [[]]
         }
     }
     
     componentDidMount(){
       const GLOBAL = require('../../Global');
-      fetch(GLOBAL.BASE_URL_REG+"WSClient/clientsARelancer?ent_num=500002")
+      fetch(GLOBAL.BASE_URL_REG+"WSFacture/clientsARelancer?ent_num=500002")
       .then(response => response.json())
       .then((responseJson)=> {
         this.setState({
@@ -28,6 +28,10 @@ export default class ClientsRelance extends Component {
 
     _alertIndex(data) {
       Alert.alert(data);
+    }
+
+    _voirClient(data){
+      Actions.situationClient({clt_id: data})
     }
 
     _call(number){
@@ -46,7 +50,7 @@ export default class ClientsRelance extends Component {
         const state = this.state;
         const element = (data) => (         
             <View style={styles.action}>
-                <TouchableOpacity onPress={() => this._alertIndex(data)}>
+                <TouchableOpacity onPress={() => this._voirClient(data)}>
                 <Icon type='ionicon' name='md-eye'/>
                 </TouchableOpacity>
                 <TouchableOpacity style={{marginLeft:20}} onPress={() => this._alertIndex(data)}>
@@ -72,18 +76,6 @@ export default class ClientsRelance extends Component {
                 ))
               }
             </Table>
-            <View style={styles.footer}>
-              <TouchableOpacity
-                activeOpacity={0.9}
-                onPress={() => this._alertIndex('load more data')}
-                //On Click of button calling loadMoreData function to load more data
-                style={styles.loadMoreBtn}>
-                <Text style={styles.btnText}>Suivant</Text>
-                {this.state.fetching_from_server ? (
-                  <ActivityIndicator color="white" style={{ marginLeft: 8 }} />
-                ) : null}
-              </TouchableOpacity>
-            </View>
           </View>
         )
   }

@@ -4,23 +4,46 @@ import { Text } from 'react-native-svg'
 import {Actions} from 'react-native-router-flux';
 
 class FacturesChart extends React.PureComponent {
+    constructor(props) {
+        super(props);
+        this.state = {
+            nbEnRetard: 0,
+            nbPayees : 0,
+            nbImpayees:0
+        }
+    }
+
+    componentDidMount(){
+        const GLOBAL = require('../../Global');
+        fetch(GLOBAL.BASE_URL_REG+"WSFacture/factureChart?ent_num=500002")
+        .then(response => response.json())
+        .then((responseJson)=> {
+          this.setState({
+            nbPayees : responseJson.nbPayees,
+            nbEnRetard : responseJson.nbEnRetard,
+            nbImpayees : responseJson.nbImpayees
+          })
+        })
+        .catch(error=>console.log(error)) //to catch the errors if any
+    }
+
     render() {
 
         const data = [
             {
                 key: 1,
-                amount: 60,
+                amount: this.state.nbEnRetard,
                 svg: { fill: '#db5400' }
             },
             {
                 key: 2,
-                amount: 50,
+                amount: this.state.nbImpayees,
                 svg: { fill: '#f59c00' }
             },
             {
                 key: 3,
-                amount: 40,
-                svg: { fill: '#5cb85c', onPress: () => Actions.clients() },
+                amount: this.state.nbPayees,
+                svg: { fill: '#5cb85c', onPress: () => Actions.clients() },//payees
                 
             }
         ]
@@ -33,10 +56,10 @@ class FacturesChart extends React.PureComponent {
                     key={index} 
                     x={pieCentroid[ 0 ]}
                     y={pieCentroid[ 1 ]}
-                    fill={'white'}
+                    fill={'black'}
                     textAnchor={'middle'}
                     alignmentBaseline={'middle'}
-                    fontSize={24}
+                    fontSize={20}
                     stroke={'black'}
                     strokeWidth={0.2}
                     onPress={() => alert('Press on Txt '+index)}
