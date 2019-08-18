@@ -7,6 +7,8 @@ import Facture from '../src/screens/Facture';
 import Clients from '../src/screens/Clients';
 import ClientsRelance from '../src/screens/ClientsRelance';
 import Reglements from '../src/screens/Reglements';
+import Reglement from '../src/screens/Reglement';
+
 import SituationClient from '../src/screens/SituationClient';
 
 import DrawerContent from './components/DrawerContent';
@@ -70,6 +72,11 @@ export default class Routes extends Component {
                         key="reglements"
                         component={Reglements}
                         title="Reglements"
+                    /> 
+                    <Scene 
+                        key="reglement"
+                        component={Reglement}
+                        title="Reglement"
                     /> 
                 </Scene>
                 </Scene>
