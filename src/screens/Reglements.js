@@ -90,8 +90,8 @@ export default class Reglements extends Component {
     }
 
     style(data){
-      // data.regc_typereg === 'R' || 
-        if(data.reg_erreur.length != 0){
+      if(data.reg_erreur!=null){
+        if(data.reg_erreur.length == 0){
             return {
                 margin: 6 ,textAlign:'center'
             }           
@@ -100,6 +100,7 @@ export default class Reglements extends Component {
                 margin: 6 ,textAlign:'center',color:'red'
             } 
         }
+      }
     }
   
 	render() {

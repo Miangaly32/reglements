@@ -16,17 +16,19 @@ export default class DrawerContent extends Component {
                 screenToNavigate: 'accueil',
             },
             {
-                key : 0,
+                key : 1,
                 navOptionThumb: 'list',
                 navOptionName: 'Factures',
                 screenToNavigate: 'factures',
             },
             {
+                key : 2,
                 navOptionThumb: 'person',
                 navOptionName: 'Clients',
                 screenToNavigate: 'clients',
             },
             {
+                key : 3,
                 navOptionThumb: 'content-copy',
                 navOptionName: 'Règlements',
                 screenToNavigate: 'reglements',
@@ -35,21 +37,24 @@ export default class DrawerContent extends Component {
     }
 
     _navigate(screen){
-        Actions.screen;
+        // Actions.screen;
+        Actions[screen]();
     }
 
-	render() {
-        console.log(this.items);
+	render() { 
+
         return(
             <View style={styles.container}>
                 <ScrollView>
-                    {/*Top Large Image */}
-                    <Image
-                    source={require('../../assets/photo_default.png')}
-                    style={styles.sideMenuProfileIcon}
-                    />
-                    <Text style={styles.textCenter}>Miangaly Manao</Text>
-                    <Text style={styles.textCenter}>miangaly.manao@gmail.com</Text>
+                    <View style={{alignItems:'center',justifyContent:'center'}}>
+                        {/*Top Large Image */}
+                        <Image
+                        source={require('../../assets/photo_default.png')}
+                        style={styles.sideMenuProfileIcon}
+                        />
+                        <Text style={styles.textCenter}>Miangaly Manao</Text>
+                        <Text style={styles.textCenter}>miangaly.manao@gmail.com</Text>
+                    </View>
 
                     {/*Divider between Top Image and Sidebar Option*/}
                     <View
@@ -63,29 +68,30 @@ export default class DrawerContent extends Component {
 
                     <View style={{ width: '100%' }}>
                         {this.items.map((item, key) => (
-                        <View
-                        style={{
-                            flexDirection: 'row',
-                            alignItems: 'center',
-                            paddingTop: 10,
-                            paddingBottom: 10,
-                            backgroundColor: global.currentScreenIndex === key ? '#e0dbdb' : '#ffffff',
-                        }}>
-                        <View style={{ marginRight: 10, marginLeft: 20 }}>
-                            <Icon name={item.navOptionThumb} size={25} color="#808080" />
-                        </View>
-                        <Text
+                            <View
+                            key = {key}
                             style={{
-                            fontSize: 15,
-                            color: global.currentScreenIndex === key ? 'red' : 'black',
-                            }}
-                            onPress={() => {
-                                global.currentScreenIndex = key;
-                                _navigate(item.screenToNavigate);
+                                flexDirection: 'row',
+                                alignItems: 'center',
+                                paddingTop: 10,
+                                paddingBottom: 10,
+                                backgroundColor: global.currentScreenIndex === key ? '#e0dbdb' : '#ffffff',
                             }}>
-                            {item.navOptionName}
-                        </Text>
-                        </View>
+                                <View style={{ marginRight: 10, marginLeft: 20 }}>
+                                <Icon name={item.navOptionThumb} size={25} color="#808080" />
+                                </View>
+                                <Text
+                                    style={{
+                                    fontSize: 15,
+                                    // color: global.currentScreenIndex === key ? 'red' : 'black',
+                                    }}
+                                    onPress={() => {
+                                        global.currentScreenIndex = key;
+                                        this._navigate(item.screenToNavigate);
+                                    }}>
+                                    {item.navOptionName}
+                                </Text>
+                            </View>
                          ))}
                     </View>
                 </ScrollView>
@@ -115,7 +121,8 @@ export default class DrawerContent extends Component {
 const styles = StyleSheet.create({
     container: {
       flex: 1,
-      padding: 50
+      padding: 10,
+      paddingTop: 30
     },
     textCenter: {
       textAlign: 'center',
@@ -126,10 +133,10 @@ const styles = StyleSheet.create({
       padding: 10,
     },
     sideMenuProfileIcon: {
-        resizeMode: 'center',
+        // resizeMode: 'center',
         width: 150,
         height: 150,
-        marginTop: 20,
-        borderRadius: 150 / 2,
+        // marginTop: 20,
+        borderRadius: 150 / 2
     }
 });
