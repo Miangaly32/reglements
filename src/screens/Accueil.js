@@ -53,6 +53,7 @@ export default class Accueil extends Component {
     }
 
     render() {
+        global.currentScreenIndex = 0;
         const miniCardStyle = {
             shadowColor       : '#000000',
             shadowOffsetWidth : 2,
