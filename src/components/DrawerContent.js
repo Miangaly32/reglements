@@ -5,44 +5,58 @@ import {Actions} from 'react-native-router-flux';
 
 export default class DrawerContent extends Component {
 
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
 
-        this.items = [
-            {
-                key : 0,
-                navOptionThumb: 'home',
-                navOptionName: 'Accueil',
-                screenToNavigate: 'accueil',
-            },
-            {
-                key : 1,
-                navOptionThumb: 'list',
-                navOptionName: 'Factures',
-                screenToNavigate: 'factures',
-            },
-            {
-                key : 2,
-                navOptionThumb: 'person',
-                navOptionName: 'Clients',
-                screenToNavigate: 'clients',
-            },
-            {
-                key : 3,
-                navOptionThumb: 'content-copy',
-                navOptionName: 'Règlements',
-                screenToNavigate: 'reglements',
-            }
-          ];
+        this.state = {
+            entreprises : [],
+            items : [
+                {
+                    key : 0,
+                    navOptionThumb: 'md-home',
+                    navOptionName: 'Accueil',
+                    screenToNavigate: 'accueil',
+                },
+                {
+                    key : 1,
+                    navOptionThumb: 'md-paper',
+                    navOptionName: 'Factures',
+                    screenToNavigate: 'factures',
+                },
+                {
+                    key : 2,
+                    navOptionThumb: 'md-person',
+                    navOptionName: 'Clients',
+                    screenToNavigate: 'clients',
+                },
+                {
+                    key : 3,
+                    navOptionThumb: 'md-copy',
+                    navOptionName: 'Règlements',
+                    screenToNavigate: 'reglements',
+                }
+            ]
+        }
+    }
+
+    componentDidMount(){
+        const GLOBAL = require('../../Global');
+        fetch(GLOBAL.BASE_URL_LIC+"entrepriseParClient/000001/"+GLOBAL.APP_ID)
+        .then(response => response.json())
+        .then((responseJson)=> {
+            this.setState({
+                entreprises : responseJson
+            })
+        })
+        .catch(error=>console.log(error)) //to catch the errors if any
     }
 
     _navigate(screen){
-        // Actions.screen;
         Actions[screen]();
     }
 
 	render() { 
-
+        const state = this.state;
         return(
             <View style={styles.container}>
                 <ScrollView>
@@ -67,7 +81,7 @@ export default class DrawerContent extends Component {
                     />
 
                     <View style={{ width: '100%' }}>
-                        {this.items.map((item, key) => (
+                        {state.items.map((item, key) => (
                             <View
                             key = {key}
                             style={{
@@ -78,12 +92,11 @@ export default class DrawerContent extends Component {
                                 backgroundColor: global.currentScreenIndex === key ? '#e0dbdb' : '#ffffff',
                             }}>
                                 <View style={{ marginRight: 10, marginLeft: 20 }}>
-                                <Icon name={item.navOptionThumb} size={25} color="#808080" />
+                                <Icon type='ionicon' name={item.navOptionThumb} size={25} color="#808080" />
                                 </View>
                                 <Text
                                     style={{
-                                    fontSize: 15,
-                                    // color: global.currentScreenIndex === key ? 'red' : 'black',
+                                    fontSize: 15
                                     }}
                                     onPress={() => {
                                         global.currentScreenIndex = key;
@@ -94,6 +107,66 @@ export default class DrawerContent extends Component {
                             </View>
                          ))}
                     </View>
+                
+                     <View
+                        style={{
+                            width: '100%',
+                            height: 1,
+                            backgroundColor: '#e2e2e2',
+                            marginTop: 15,
+                        }}
+                    />    
+
+                    <View style={{ width: '100%' }}>
+                        {state.entreprises.map((item, key) => (
+                            <View
+                            key={key}
+                            style={{
+                                flexDirection: 'row',
+                                alignItems: 'center',
+                                paddingTop: 10,
+                                paddingBottom: 10,
+                                backgroundColor: global.currentEnt === item.ent_num ? '#50AFA1' : '#ffffff',
+                            }}>
+                                <Text
+                                    style={{
+                                        fontSize: 15,marginLeft: 20,color : global.currentEnt === item.ent_num ? '#fff' : '#000'
+                                    }}
+                                    onPress={() => { global.currentEnt = item.ent_num}}>
+                                    {item.ent_raisonsocial}
+                                </Text>
+                            </View>
+                        ))}
+                    </View>   
+
+                    <View
+                        style={{
+                            width: '100%',
+                            height: 1,
+                            backgroundColor: '#e2e2e2',
+                            marginTop: 15,
+                        }}
+                    />  
+
+                    <View
+                    style={{
+                        flexDirection: 'row',
+                        alignItems: 'center',
+                        paddingTop: 10,
+                        paddingBottom: 10
+                    }}>
+                        <View style={{ marginRight: 10, marginLeft: 20 }}>
+                            <Icon type='ionicon' name='md-log-out' size={25} color="#808080" />
+                        </View>
+                        <Text
+                            style={{
+                            fontSize: 15
+                            }}
+                            onPress={() => { }}>
+                            Déconnexion
+                        </Text>
+                    </View>
+
                 </ScrollView>
             </View>
             // <ScrollView style={styles.container}>

@@ -8,7 +8,7 @@
     "eject": "expo eject"
   },
   "dependencies": {
-    "core-js": "^3.1.4",
+    "core-js": "^3.2.1",
     "expo": "^34.0.1",
     "react": "16.8.3",
     "react-dom": "^16.8.6",
@@ -17,11 +17,12 @@
     "react-native-dashboard": "0.0.4",
     "react-native-drawer": "^2.5.1",
     "react-native-elements": "^1.1.0",
+    "react-native-mail": "^4.0.0",
     "react-native-phone-call": "^1.0.9",
     "react-native-rn-cardview": "^1.0.4",
     "react-native-router-flux": "^4.0.6",
     "react-native-simple-card-view": "^0.3.0",
-    "react-native-svg": "^9.6.2",
+    "react-native-svg": "^9.6.4",
     "react-native-svg-charts": "^5.3.0",
     "react-native-table-component": "^1.2.0",
     "react-native-web": "^0.11.4"

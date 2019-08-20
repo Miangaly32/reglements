@@ -6,6 +6,7 @@ import { Badge} from 'react-native-elements';
 import {Text,Button,Icon} from 'react-native-elements';
 import {Actions} from 'react-native-router-flux';
 import { CardViewWithIcon } from "react-native-simple-card-view";
+import SendMail  from "../components/SendMail";
 
 export default class Accueil extends Component {
     constructor(props) {
@@ -69,6 +70,7 @@ export default class Accueil extends Component {
         return (
         <ScrollView >   
             <View style={styles.container}> 
+            <SendMail/>
             <View style={ {flexDirection: "row"} }>
                 <CardViewWithIcon
                     withBackground={ false }

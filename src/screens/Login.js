@@ -10,12 +10,14 @@ export default class Login extends Component {
 		this.state={            
 			email:'',
 			password: ''        
-		}   
+    }   
+  
   }
-    
+  
   login = async() =>{
     const {email,password} = this.state;
-      Actions.accueil()
+    Actions.accueil();
+    global.currentEnt = '500002' ;// a changer
   }
 
 	render() {
