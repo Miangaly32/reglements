@@ -3,6 +3,8 @@ import { StyleSheet, ScrollView,View,Dimensions} from 'react-native';
 import { CardViewWithIcon } from "react-native-simple-card-view";
 import {Text} from 'react-native-elements';
 import { Table, TableWrapper, Row, Cell } from 'react-native-table-component';
+import { Linking } from 'react-native';
+import call from 'react-native-phone-call';
 
 export default class SituationClient extends Component {
 
@@ -45,6 +47,22 @@ export default class SituationClient extends Component {
         })
         .catch(error=>console.log(error)) //to catch the errors if any
     }
+
+    _openMail(clt_mail){
+        Linking.openURL('mailto:'+clt_mail)
+    }
+
+    _call(number){
+        if(number!==''){
+          const args = {
+            number: number, // String value with the number to call
+            prompt: false // Optional boolean property. Determines if the user should be prompt prior to the call 
+          }
+          call(args).catch(console.error)
+        }else{
+          this._alertIndex('Aucun numero de telephone fourni')
+        }
+      }
 
 	render() {
         const cardStyle = {
@@ -122,6 +140,7 @@ export default class SituationClient extends Component {
                         title={ 'Contacter par email' }
                         titleFontSize={ 20 }
                         style={ cardStyle }
+                        onPress={() => this._openMail(this.state.client.clt_mail)}
                     />
                     <CardViewWithIcon
                         withBackground={ false }
@@ -131,6 +150,7 @@ export default class SituationClient extends Component {
                         title={ 'Appler' }
                         titleFontSize={ 20 }
                         style={ cardStyle }
+                        onPress={() => this._call(this.state.client.clt_tel)}
                     />
                 </View>
                 <Text h3 style={{textAlign:'center'}}>Factures impayées</Text>

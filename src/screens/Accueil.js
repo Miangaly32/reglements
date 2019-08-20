@@ -6,7 +6,6 @@ import { Badge} from 'react-native-elements';
 import {Text,Button,Icon} from 'react-native-elements';
 import {Actions} from 'react-native-router-flux';
 import { CardViewWithIcon } from "react-native-simple-card-view";
-import SendMail  from "../components/SendMail";
 
 export default class Accueil extends Component {
     constructor(props) {
@@ -70,7 +69,6 @@ export default class Accueil extends Component {
         return (
         <ScrollView >   
             <View style={styles.container}> 
-            <SendMail/>
             <View style={ {flexDirection: "row"} }>
                 <CardViewWithIcon
                     withBackground={ false }
@@ -106,6 +104,11 @@ export default class Accueil extends Component {
                     style={{width: 100}}
                     selectedValue={this.state.language}
                     onValueChange={(lang) => this.setState({language: lang})}>
+                    {/* {data.map((item) =>{
+                        return(
+                        <Picker.Item  label={item.name} value={item.name} key={item.name}/>
+                        );
+                    })} */}
                     <Picker.Item label="Java" value="java" />
                     <Picker.Item label="PHP" value="php" />
                 </Picker>
@@ -119,9 +122,9 @@ export default class Accueil extends Component {
             </View>
             <FacturesChart/>
             <View style={styles.legend}>
-                <Badge value={this.state.nbImpayees+" Impayees"} onPress={() => this._alertIndex()} containerStyle={{margin:10}} textStyle={{fontSize:15}} badgeStyle={{ padding:4,backgroundColor:'#f59c00'}}/>
-                <Badge value={this.state.nbPayees+" Payees"} textStyle={{fontSize:15}} containerStyle={{margin:10}} badgeStyle={{  padding:4,backgroundColor:'#5cb85c'}}/>  
-                <Badge value={this.state.nbEnRetard+" En retard de paiement"} textStyle={{fontSize:15}} containerStyle={{margin:10}} badgeStyle={{  padding:4,backgroundColor:'#db5400'}}/>  
+                <Badge value={this.state.nbImpayees+" Impayees"} onPress={Actions.facturesImpayees} containerStyle={{margin:10}} textStyle={{fontSize:15}} badgeStyle={{ padding:4,backgroundColor:'#f59c00'}}/>
+                <Badge value={this.state.nbPayees+" Payees"} onPress={Actions.facturesPayees} textStyle={{fontSize:15}} containerStyle={{margin:10}} badgeStyle={{  padding:4,backgroundColor:'#5cb85c'}}/>  
+                <Badge value={this.state.nbEnRetard+" En retard de paiement"} onPress={Actions.facturesRetards} textStyle={{fontSize:15}} containerStyle={{margin:10}} badgeStyle={{  padding:4,backgroundColor:'#db5400'}}/>  
             </View>  
             </View>
 

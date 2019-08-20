@@ -33,21 +33,20 @@ class FacturesChart extends React.PureComponent {
             {
                 key: 1,
                 amount: this.state.nbEnRetard,
-                svg: { fill: '#db5400' }
+                svg: { fill: '#db5400' , onPress: () => Actions.facturesRetards()}
             },
             {
                 key: 2,
                 amount: this.state.nbImpayees,
-                svg: { fill: '#f59c00' }
+                svg: { fill: '#f59c00' , onPress: () => Actions.facturesImpayees()}
             },
             {
+
                 key: 3,
                 amount: this.state.nbPayees,
-                svg: { fill: '#5cb85c', onPress: () => Actions.clients() },//payees
-                
+                svg: { fill: '#5cb85c', onPress: () => Actions.facturesPayees() },
             }
         ]
-
         const Labels = ({ slices, height, width }) => {
             return slices.map((slice, index) => {
                 const { labelCentroid, pieCentroid, data } = slice;
@@ -62,7 +61,6 @@ class FacturesChart extends React.PureComponent {
                     fontSize={20}
                     stroke={'black'}
                     strokeWidth={0.2}
-                    onPress={() => alert('Press on Txt '+index)}
                     >
                         {data.amount}
                     </Text>

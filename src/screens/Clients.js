@@ -4,6 +4,7 @@ import { Table, TableWrapper, Row, Cell } from 'react-native-table-component';
 import { Icon,SearchBar  } from 'react-native-elements';
 import call from 'react-native-phone-call';
 import {Actions} from 'react-native-router-flux';
+import { Linking } from 'react-native';
 
 export default class Clients extends Component {
    
@@ -83,10 +84,6 @@ export default class Clients extends Component {
       });
     };
 
-    _alertIndex(data) {
-      Alert.alert(data);
-    }
-
     _voirClient(data){
       Actions.situationClient({clt_id: data})
     }
@@ -103,6 +100,10 @@ export default class Clients extends Component {
       }
     }
 
+    _openMail(clt_mail){
+      Linking.openURL('mailto:'+clt_mail)
+    }
+
     render() {
         const state = this.state;
         const element = (clt_tel,clt_id,clt_mail) => (         
@@ -110,7 +111,7 @@ export default class Clients extends Component {
                  <TouchableOpacity onPress={() => this._voirClient(clt_id)}>
                 <Icon type='ionicon' name='md-eye'/>
                 </TouchableOpacity>
-                <TouchableOpacity style={{marginLeft:20}} onPress={() => this._alertIndex(clt_mail)}>
+                <TouchableOpacity style={{marginLeft:20}} onPress={() => this._openMail(clt_mail)}>
                 <Icon name='mail'/>
                 </TouchableOpacity>
                 <TouchableOpacity style={{marginLeft:20}} onPress={() => this._call(clt_tel)}>
@@ -128,13 +129,13 @@ export default class Clients extends Component {
               value={this.state.search}
             />
             <Table borderStyle={{borderColor: 'transparent'}}>
-              <Row data={state.tableHead} style={styles.head} textStyle={styles.text}/>
+              <Row widthArr={[75,200,150]} data={state.tableHead} style={styles.head} textStyle={styles.text}/>
               {
                  state.tableData.map((rowData, index) => (
                   <TableWrapper key={index} style={styles.row}  > 
-                       <Cell key={0} data={rowData.clt_numero} textStyle={styles.text}/>
-                       <Cell key={1} data={rowData.clt_societe} textStyle={styles.text}/>
-                       <Cell key={2} data={ element(rowData.clt_tel,rowData.clt_id,rowData.clt_mail) } textStyle={styles.text} />
+                       <Cell width={75} key={0} data={rowData.clt_numero} textStyle={styles.text}/>
+                       <Cell width={200} key={1} data={rowData.clt_societe} textStyle={styles.text}/>
+                       <Cell width={150} key={2} data={ element(rowData.clt_tel,rowData.clt_id,rowData.clt_mail) } textStyle={styles.text} />
                   </TableWrapper>
                 ))
               }

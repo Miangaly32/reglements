@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import { StyleSheet, Text, View, TextInput, TouchableOpacity, Image } from 'react-native';
- 
+import { StyleSheet, View, TextInput, TouchableOpacity, Image } from 'react-native';
+import {Text} from 'react-native-elements';
 import {Actions} from 'react-native-router-flux';
 
 
@@ -27,7 +27,7 @@ export default class Login extends Component {
                   style={{width: 100, height: 100}}
                   source={require('../../assets/REGLEMENT.png')}
                 />
-                <Text style={{padding:20}}>MANAO REGLEMENT</Text>
+                <Text h4 style={{margin:10}}>MANAO REGLEMENT</Text>
                 
                 <TextInput style={styles.inputBox}
                 onChangeText={(email) => this.setState({email})}

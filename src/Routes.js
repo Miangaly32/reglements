@@ -4,6 +4,9 @@ import Login from '../src/screens/Login';
 import Accueil from '../src/screens/Accueil';
 import Factures from '../src/screens/Factures';
 import Facture from '../src/screens/Facture';
+import FacturesImpayees from '../src/screens/FacturesImpayees';
+import FacturesPayees from '../src/screens/FacturesPayees';
+import FacturesRetards from '../src/screens/FacturesRetards';
 import Clients from '../src/screens/Clients';
 import ClientsRelance from '../src/screens/ClientsRelance';
 import Reglements from '../src/screens/Reglements';
@@ -47,6 +50,21 @@ export default class Routes extends Component {
                         key="factures"
                         component={Factures}
                         title="Factures"
+                    /> 
+                     <Scene 
+                        key="facturesImpayees"
+                        component={FacturesImpayees}
+                        title="Factures impayées"
+                    /> 
+                    <Scene 
+                        key="facturesPayees"
+                        component={FacturesPayees}
+                        title="Factures payées"
+                    /> 
+                    <Scene 
+                        key="facturesRetards"
+                        component={FacturesRetards}
+                        title="Factures en retard de paiement"
                     /> 
                      <Scene 
                         key="facture"

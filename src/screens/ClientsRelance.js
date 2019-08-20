@@ -4,6 +4,7 @@ import { Table, TableWrapper, Row, Cell } from 'react-native-table-component';
 import { Icon } from 'react-native-elements';
 import call from 'react-native-phone-call';
 import {Actions} from 'react-native-router-flux';
+import { Linking } from 'react-native';
 
 export default class ClientsRelance extends Component {
     constructor(props) {
@@ -25,11 +26,7 @@ export default class ClientsRelance extends Component {
       })
       .catch(error=>console.log(error)) //to catch the errors if any
     }
-
-    _alertIndex(data) {
-      Alert.alert(data);
-    }
-
+    
     _voirClient(data){
       Actions.situationClient({clt_id: data})
     }
@@ -46,17 +43,21 @@ export default class ClientsRelance extends Component {
       }
     }
 
+    _openMail(clt_mail){
+      Linking.openURL('mailto:'+clt_mail)
+    }
+
     render() {
         const state = this.state;
-        const element = (data) => (         
+        const element = (tel,clt_id,mail) => (         
             <View style={styles.action}>
-                <TouchableOpacity onPress={() => this._voirClient(data)}>
+                <TouchableOpacity onPress={() => this._voirClient(clt_id)}>
                 <Icon type='ionicon' name='md-eye'/>
                 </TouchableOpacity>
-                <TouchableOpacity style={{marginLeft:20}} onPress={() => this._alertIndex(data)}>
+                <TouchableOpacity style={{marginLeft:20}} onPress={() => this._openMail(mail)}>
                 <Icon name='mail'/>
                 </TouchableOpacity>
-                <TouchableOpacity style={{marginLeft:20}} onPress={() => this._call(data)}>
+                <TouchableOpacity style={{marginLeft:20}} onPress={() => this._call(tel)}>
                     <Icon  name='call'/> 
                  </TouchableOpacity>
             </View>         
@@ -65,13 +66,13 @@ export default class ClientsRelance extends Component {
         return (
           <View style={styles.container}>
             <Table borderStyle={{borderColor: 'transparent'}}>
-              <Row data={state.tableHead} style={styles.head} textStyle={styles.text}/>
+              <Row widthArr={[75,200,150]} data={state.tableHead} style={styles.head} textStyle={styles.text}/>
               {
                  state.tableData.map((rowData, index) => (
                   <TableWrapper key={index} style={styles.row}  > 
-                       <Cell key={0} data={rowData.clt_numero} textStyle={styles.text}/>
-                       <Cell key={1} data={rowData.clt_societe} textStyle={styles.text}/>
-                       <Cell key={2} data={ element(rowData.clt_tel) } textStyle={styles.text} />
+                      <Cell width={75} key={0} data={rowData.clt_numero} textStyle={styles.text}/>
+                       <Cell width={200} key={1} data={rowData.clt_societe} textStyle={styles.text}/>
+                       <Cell width={150} key={2} data={ element(rowData.clt_tel,rowData.clt_id,rowData.clt_mail) } textStyle={styles.text} />
                   </TableWrapper>
                 ))
               }
@@ -82,7 +83,7 @@ export default class ClientsRelance extends Component {
 }
      
     const styles = StyleSheet.create({
-      container: { flex: 1, padding: 16, paddingTop: 30, backgroundColor: '#fff' },
+      container: { flex: 1, backgroundColor: '#fff' },
       head: { height: 40, backgroundColor: '#808B97' },
       text: { margin: 6 },
       row: { flexDirection: 'row', backgroundColor: '#FFF1C1' },
