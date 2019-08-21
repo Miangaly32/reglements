@@ -7,6 +7,7 @@ import Facture from '../src/screens/Facture';
 import FacturesImpayees from '../src/screens/FacturesImpayees';
 import FacturesPayees from '../src/screens/FacturesPayees';
 import FacturesRetards from '../src/screens/FacturesRetards';
+import FacturesAvoirs from '../src/screens/FacturesAvoirs';
 import Clients from '../src/screens/Clients';
 import ClientsRelance from '../src/screens/ClientsRelance';
 import Reglements from '../src/screens/Reglements';
@@ -65,6 +66,11 @@ export default class Routes extends Component {
                         key="facturesRetards"
                         component={FacturesRetards}
                         title="Factures en retard de paiement"
+                    /> 
+                    <Scene 
+                        key="facturesAvoirs"
+                        component={FacturesAvoirs}
+                        title="Factures d'avoir à regler"
                     /> 
                      <Scene 
                         key="facture"

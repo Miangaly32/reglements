@@ -11,6 +11,7 @@ export default class Reglement extends Component {
             tableHead: ['N° facture', 'Date facture','Montant payé'],
             tableData: [[]],
         } 
+        global.currentScreenIndex = 3;
     }
 
     componentDidMount(){

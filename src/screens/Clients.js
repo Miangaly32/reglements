@@ -18,6 +18,7 @@ export default class Clients extends Component {
           start :0,
           search: ''
         }
+        global.currentScreenIndex = 2;
     }
     
     componentDidMount(){

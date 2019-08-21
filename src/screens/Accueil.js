@@ -11,15 +11,19 @@ export default class Accueil extends Component {
     constructor(props) {
         super(props);
         this.state = {
-          state: 'php',
+          exercice_reg: '',
+        //   exercice_fact: '',
           nbAvoir : 0,
           nbClientRelance : 0,
           montantAvoir:'',
           montantRelance:'',  
-           nbEnRetard: 0,
+          nbEnRetard: 0,
           nbPayees : 0,
-          nbImpayees:0
+          nbImpayees:0,
+          exercices : [],
+        //   periodes:[]
         }
+        global.currentScreenIndex = 0;
     }
 
     componentDidMount(){
@@ -46,6 +50,29 @@ export default class Accueil extends Component {
           })
         })
         .catch(error=>console.log(error)) //to catch the errors if any
+
+        fetch(GLOBAL.BASE_URL_REG+"WSExercice/getExercices?ent_num=500002")
+        .then(response => response.json())
+        .then((responseJson)=> {
+            if(responseJson.length>0){
+                this.setState({
+                    exercices : responseJson,
+                    exercice_reg : responseJson[0].exe_id,
+                    // exercice_fact : responseJson[0].exe_id,
+                }) 
+                
+                // fetch(GLOBAL.BASE_URL_REG+"WSExercice/getPeriodes?ent_num=500002&exe_id="+this.state.exercice_fact)
+                // .then(response => response.json())
+                // .then((responseJson)=> {
+                //   this.setState({
+                //     periodes : responseJson
+                //   })
+                // })
+                // .catch(error=>console.log(error)) //to catch the errors if any
+            }
+        })
+        .catch(error=>console.log(error)) //to catch the errors if any
+
     }
 
     _alertIndex(index) {
@@ -94,32 +121,34 @@ export default class Accueil extends Component {
                     contentFontSize={ 20 }
                     titleFontSize={ 18}
                     style={ miniCardStyle }
+                    onPress={Actions.facturesAvoirs}
                 />
             </View>
 
             <View style={styles.factures}>
-            <Text h2 style={{textAlign:'center'}}>Factures</Text>
-            <View style={styles.row}>
+            <Text h2 style={{textAlign:'center'}}>Factures dues</Text>
+            {/* <View style={styles.row}>
                 <Picker
                     style={{width: 100}}
-                    selectedValue={this.state.language}
-                    onValueChange={(lang) => this.setState({language: lang})}>
-                    {/* {data.map((item) =>{
+                    selectedValue={this.state.exercice_fact}
+                    onValueChange={(exe) => this.setState({exercice_fact: exe})}>
+                    {this.state.exercices.map((item) =>{
                         return(
-                        <Picker.Item  label={item.name} value={item.name} key={item.name}/>
+                            <Picker.Item  label={item.exe_libelle} value={item.exe_libelle} key={item.exe_id}/>
                         );
-                    })} */}
-                    <Picker.Item label="Java" value="java" />
-                    <Picker.Item label="PHP" value="php" />
+                    })}
                 </Picker>
                 <Picker
-                    style={{width: 100}}
-                    selectedValue={this.state.language}
-                    onValueChange={(lang) => this.setState({language: lang})}>
-                    <Picker.Item label="Java" value="java" />
-                    <Picker.Item label="PHP" value="php" />
+                    style={{width: 200}}
+                    selectedValue={this.state.exercice_fact}
+                    onValueChange={(exe) => this.setState({exercice_fact: exe})}>
+                    {this.state.periodes.map((item) =>{
+                        return(
+                            <Picker.Item  label={item.per_libelle} value={item.per_debut} key={item.per_id}/>
+                        );
+                    })}
                 </Picker>
-            </View>
+            </View> */}
             <FacturesChart/>
             <View style={styles.legend}>
                 <Badge value={this.state.nbImpayees+" Impayees"} onPress={Actions.facturesImpayees} containerStyle={{margin:10}} textStyle={{fontSize:15}} badgeStyle={{ padding:4,backgroundColor:'#f59c00'}}/>
@@ -129,10 +158,21 @@ export default class Accueil extends Component {
             </View>
 
             <View style={styles.factures}>
-                <Text h2 style={{textAlign:'center'}}>Règlements</Text>
-                <ReglementsChart/>
+                <Text h2 style={{textAlign:'center'}}>Règlements par an</Text>
+                <View style={styles.row}>
+                <Picker
+                    style={{width:100}}
+                    selectedValue={this.state.exercice_reg}
+                    onValueChange={(exe) => this.setState({exercice_reg: exe})}>
+                    {this.state.exercices.map((item) =>{
+                        return(
+                        <Picker.Item  label={item.exe_libelle} value={item.exe_id} key={item.exe_id}/>
+                        );
+                    })}
+                </Picker>
+                </View>
+                <ReglementsChart exe_id={this.state.exercice_reg}/>
             </View>
-
         </View>    
         </ScrollView>
         )

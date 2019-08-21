@@ -128,7 +128,7 @@ export default class Factures extends Component {
                     value={this.state.search}
                 />
                 <Table borderStyle={{borderColor: 'transparent'}}>
-                <Row widthArr={[80,65,75,120,70]} data={state.tableHead} style={styles.head} textStyle={styles.text}/>
+                <Row widthArr={[80,65,75,110,80]} data={state.tableHead} style={styles.head} textStyle={styles.text}/>
                 {
                     state.tableData.map((rowData, index) => (
                     <TableWrapper key={index} style={styles.row}  > 
@@ -137,7 +137,7 @@ export default class Factures extends Component {
                         {rowData.date_limite_payement == null && rowData.fac_datelimitepaiement == null ? (
                         <Cell width={75} key={2} data={'-'} textStyle={styles.text}/>) : rowData.date_limite_payement != null ?  <Cell key={2}  width={75} data={rowData.date_limite_payement} textStyle={styles.text}/> : <Cell  width={75} key={2} data={rowData.fac_datelimitepaiement} textStyle={styles.text}/>}   
                         <Cell width={110}  key={3} data={rowData.reste} textStyle={styles.text}/>      
-                        <Cell width={70}  key={4} data={ element(rowData.clt_tel,rowData.fac_id,rowData.clt_mail) } textStyle={styles.text} />
+                        <Cell width={80}  key={4} data={ element(rowData.clt_tel,rowData.fac_id,rowData.clt_mail) } textStyle={styles.text} />
                     </TableWrapper>
                     ))
                 }

@@ -16,6 +16,7 @@ export default class Reglements extends Component {
           start :0,
           search: ''
         }
+        global.currentScreenIndex = 3;
     }
 
     componentDidMount(){

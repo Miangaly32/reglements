@@ -13,6 +13,7 @@ export default class ClientsRelance extends Component {
           tableHead: ['Numero', 'Societe', 'Actions'],
           tableData: [[]]
         }
+        global.currentScreenIndex = 2;
     }
     
     componentDidMount(){

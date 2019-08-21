@@ -16,6 +16,7 @@ export default class SituationClient extends Component {
             tableHead: ['Numero', 'Date limite', 'Montant', 'Reste à payer'],
             tableData: [[]]
         }
+        global.currentScreenIndex = 2;
     }
 
     componentDidMount(){

@@ -18,11 +18,12 @@ export default class FacturesImpayees extends Component {
           start :0,
           search: ''
         }
+        global.currentScreenIndex = 1;
     }
 
     componentDidMount(){
         const GLOBAL = require('../../Global');
-        fetch(GLOBAL.BASE_URL_REG+"WSFacture/listeFactures?ent_num=500002&etat=0&start="+this.state.start)
+        fetch(GLOBAL.BASE_URL_REG+"WSFacture/listeFactures?type=1&ent_num=500002&etat=0&start="+this.state.start)
         .then(response => response.json())
         .then((responseJson)=> {
           this.setState({
@@ -35,7 +36,7 @@ export default class FacturesImpayees extends Component {
     prev = () => {
         const GLOBAL = require('../../Global');
         this.setState({ fetching_from_server_prev: true , start : this.state.start - 20}, () => {
-        fetch(GLOBAL.BASE_URL_REG+"WSFacture/listeFactures?ent_num=500002&etat=0&start="+this.state.start+"&search="+this.state.search)
+        fetch(GLOBAL.BASE_URL_REG+"WSFacture/listeFactures?type=1&ent_num=500002&etat=0&start="+this.state.start+"&search="+this.state.search)
             .then(response => response.json())
             .then(responseJson => {
               this.setState({
@@ -52,7 +53,7 @@ export default class FacturesImpayees extends Component {
       next = () => {
           const GLOBAL = require('../../Global');
           this.setState({ fetching_from_server_next: true , start : this.state.start + 20}, () => {
-          fetch(GLOBAL.BASE_URL_REG+"WSFacture/listeFactures?ent_num=500002&etat=0&start="+this.state.start+"&search="+this.state.search)
+          fetch(GLOBAL.BASE_URL_REG+"WSFacture/listeFactures?type=1&ent_num=500002&etat=0&start="+this.state.start+"&search="+this.state.search)
               .then(response => response.json())
               .then(responseJson => {
                 this.setState({
@@ -70,7 +71,7 @@ export default class FacturesImpayees extends Component {
         this.setState({ search:search });
         const GLOBAL = require('../../Global');
           this.setState({start : 0}, () => {
-          fetch(GLOBAL.BASE_URL_REG+"WSFacture/listeFactures?ent_num=500002&etat=0&start="+this.state.start+"&search="+search)
+          fetch(GLOBAL.BASE_URL_REG+"WSFacture/listeFactures?type=1&ent_num=500002&etat=0&start="+this.state.start+"&search="+search)
               .then(response => response.json())
               .then(responseJson => {
                 this.setState({
@@ -128,7 +129,7 @@ export default class FacturesImpayees extends Component {
                     value={this.state.search}
                 />
                 <Table borderStyle={{borderColor: 'transparent'}}>
-                <Row widthArr={[80,65,75,120,70]} data={state.tableHead} style={styles.head} textStyle={styles.text}/>
+                <Row widthArr={[80,65,75,110,80]} data={state.tableHead} style={styles.head} textStyle={styles.text}/>
                 {
                     state.tableData.map((rowData, index) => (
                     <TableWrapper key={index} style={styles.row}  > 
@@ -137,7 +138,7 @@ export default class FacturesImpayees extends Component {
                         {rowData.date_limite_payement == null && rowData.fac_datelimitepaiement == null ? (
                         <Cell width={75} key={2} data={'-'} textStyle={styles.text}/>) : rowData.date_limite_payement != null ?  <Cell key={2}  width={75} data={rowData.date_limite_payement} textStyle={styles.text}/> : <Cell  width={75} key={2} data={rowData.fac_datelimitepaiement} textStyle={styles.text}/>}   
                         <Cell width={110}  key={3} data={rowData.reste} textStyle={styles.text}/>      
-                        <Cell width={70}  key={4} data={ element(rowData.clt_tel,rowData.fac_id,rowData.clt_mail) } textStyle={styles.text} />
+                        <Cell width={80}  key={4} data={ element(rowData.clt_tel,rowData.fac_id,rowData.clt_mail) } textStyle={styles.text} />
                     </TableWrapper>
                     ))
                 }
