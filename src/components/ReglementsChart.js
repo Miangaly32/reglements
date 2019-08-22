@@ -12,7 +12,7 @@ class ReglementChart extends React.PureComponent {
 
     componentWillReceiveProps(props){
         const GLOBAL = require('../../Global');
-        fetch(GLOBAL.BASE_URL_REG+"WSReglement/reglementChart?ent_num=500002&exe_id="+props.exe_id)
+        fetch(GLOBAL.BASE_URL_REG+"WSReglement/reglementChart?ent_num="+global.currentEnt+"&exe_id="+props.exe_id)
         .then(response => response.json())
         .then((responseJson)=> {
             this.setState({

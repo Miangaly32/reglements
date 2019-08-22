@@ -15,7 +15,7 @@ class FacturesChart extends React.PureComponent {
 
     componentDidMount(){
         const GLOBAL = require('../../Global');
-        fetch(GLOBAL.BASE_URL_REG+"WSFacture/factureChart?ent_num=500002")
+        fetch(GLOBAL.BASE_URL_REG+"WSFacture/factureChart?ent_num="+global.currentEnt)
         .then(response => response.json())
         .then((responseJson)=> {
           this.setState({

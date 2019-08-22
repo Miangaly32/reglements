@@ -12,7 +12,6 @@ export default class Accueil extends Component {
         super(props);
         this.state = {
           exercice_reg: '',
-        //   exercice_fact: '',
           nbAvoir : 0,
           nbClientRelance : 0,
           montantAvoir:'',
@@ -20,15 +19,14 @@ export default class Accueil extends Component {
           nbEnRetard: 0,
           nbPayees : 0,
           nbImpayees:0,
-          exercices : [],
-        //   periodes:[]
+          exercices : []
         }
         global.currentScreenIndex = 0;
     }
 
     componentDidMount(){
         const GLOBAL = require('../../Global');
-        fetch(GLOBAL.BASE_URL_REG+"WSFacture/dashboard?ent_num=500002")
+        fetch(GLOBAL.BASE_URL_REG+"WSFacture/dashboard?ent_num="+global.currentEnt)
         .then(response => response.json())
         .then((responseJson)=> {
           this.setState({
@@ -40,7 +38,7 @@ export default class Accueil extends Component {
         })
         .catch(error=>console.log(error)) //to catch the errors if any
 
-        fetch(GLOBAL.BASE_URL_REG+"WSFacture/factureChart?ent_num=500002")
+        fetch(GLOBAL.BASE_URL_REG+"WSFacture/factureChart?ent_num="+global.currentEnt)
         .then(response => response.json())
         .then((responseJson)=> {
           this.setState({
@@ -51,24 +49,14 @@ export default class Accueil extends Component {
         })
         .catch(error=>console.log(error)) //to catch the errors if any
 
-        fetch(GLOBAL.BASE_URL_REG+"WSExercice/getExercices?ent_num=500002")
+        fetch(GLOBAL.BASE_URL_REG+"WSExercice/getExercices?ent_num="+global.currentEnt)
         .then(response => response.json())
         .then((responseJson)=> {
             if(responseJson.length>0){
                 this.setState({
                     exercices : responseJson,
-                    exercice_reg : responseJson[0].exe_id,
-                    // exercice_fact : responseJson[0].exe_id,
+                    exercice_reg : responseJson[0].exe_id
                 }) 
-                
-                // fetch(GLOBAL.BASE_URL_REG+"WSExercice/getPeriodes?ent_num=500002&exe_id="+this.state.exercice_fact)
-                // .then(response => response.json())
-                // .then((responseJson)=> {
-                //   this.setState({
-                //     periodes : responseJson
-                //   })
-                // })
-                // .catch(error=>console.log(error)) //to catch the errors if any
             }
         })
         .catch(error=>console.log(error)) //to catch the errors if any
@@ -127,32 +115,10 @@ export default class Accueil extends Component {
 
             <View style={styles.factures}>
             <Text h2 style={{textAlign:'center'}}>Factures dues</Text>
-            {/* <View style={styles.row}>
-                <Picker
-                    style={{width: 100}}
-                    selectedValue={this.state.exercice_fact}
-                    onValueChange={(exe) => this.setState({exercice_fact: exe})}>
-                    {this.state.exercices.map((item) =>{
-                        return(
-                            <Picker.Item  label={item.exe_libelle} value={item.exe_libelle} key={item.exe_id}/>
-                        );
-                    })}
-                </Picker>
-                <Picker
-                    style={{width: 200}}
-                    selectedValue={this.state.exercice_fact}
-                    onValueChange={(exe) => this.setState({exercice_fact: exe})}>
-                    {this.state.periodes.map((item) =>{
-                        return(
-                            <Picker.Item  label={item.per_libelle} value={item.per_debut} key={item.per_id}/>
-                        );
-                    })}
-                </Picker>
-            </View> */}
             <FacturesChart/>
             <View style={styles.legend}>
-                <Badge value={this.state.nbImpayees+" Impayees"} onPress={Actions.facturesImpayees} containerStyle={{margin:10}} textStyle={{fontSize:15}} badgeStyle={{ padding:4,backgroundColor:'#f59c00'}}/>
-                <Badge value={this.state.nbPayees+" Payees"} onPress={Actions.facturesPayees} textStyle={{fontSize:15}} containerStyle={{margin:10}} badgeStyle={{  padding:4,backgroundColor:'#5cb85c'}}/>  
+                <Badge value={this.state.nbImpayees+" Impayées"} onPress={Actions.facturesImpayees} containerStyle={{margin:10}} textStyle={{fontSize:15}} badgeStyle={{ padding:4,backgroundColor:'#f59c00'}}/>
+                <Badge value={this.state.nbPayees+" Payées"} onPress={Actions.facturesPayees} textStyle={{fontSize:15}} containerStyle={{margin:10}} badgeStyle={{  padding:4,backgroundColor:'#5cb85c'}}/>  
                 <Badge value={this.state.nbEnRetard+" En retard de paiement"} onPress={Actions.facturesRetards} textStyle={{fontSize:15}} containerStyle={{margin:10}} badgeStyle={{  padding:4,backgroundColor:'#db5400'}}/>  
             </View>  
             </View>

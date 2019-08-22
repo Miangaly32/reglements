@@ -18,7 +18,7 @@ export default class ClientsRelance extends Component {
     
     componentDidMount(){
       const GLOBAL = require('../../Global');
-      fetch(GLOBAL.BASE_URL_REG+"WSFacture/clientsARelancer?ent_num=500002")
+      fetch(GLOBAL.BASE_URL_REG+"WSFacture/clientsARelancer?ent_num="+global.currentEnt)
       .then(response => response.json())
       .then((responseJson)=> {
         this.setState({

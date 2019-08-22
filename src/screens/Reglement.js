@@ -16,7 +16,7 @@ export default class Reglement extends Component {
 
     componentDidMount(){
         const GLOBAL = require('../../Global');
-        fetch(GLOBAL.BASE_URL_REG+"WSReglement/getReglement?ent_num=500002&regc_id="+this.props.regc_id)
+        fetch(GLOBAL.BASE_URL_REG+"WSReglement/getReglement?ent_num="+global.currentEnt+"&regc_id="+this.props.regc_id)
         .then(response => response.json())
         .then((responseJson)=> {
           this.setState({

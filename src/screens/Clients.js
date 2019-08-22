@@ -23,7 +23,7 @@ export default class Clients extends Component {
     
     componentDidMount(){
       const GLOBAL = require('../../Global');
-      fetch(GLOBAL.BASE_URL_REG+"WSClient/listeClients?ent_num=500002&start="+this.state.start)
+      fetch(GLOBAL.BASE_URL_REG+"WSClient/listeClients?ent_num="+global.currentEnt+"&start="+this.state.start)
       .then(response => response.json())
       .then((responseJson)=> {
         this.setState({
@@ -36,7 +36,7 @@ export default class Clients extends Component {
     prev = () => {
       const GLOBAL = require('../../Global');
       this.setState({ fetching_from_server_prev: true , start : this.state.start - 20}, () => {
-      fetch(GLOBAL.BASE_URL_REG+"WSClient/listeClients?ent_num=500002&start="+this.state.start+"&search="+this.state.search)
+      fetch(GLOBAL.BASE_URL_REG+"WSClient/listeClients?ent_num="+global.currentEnt+"&start="+this.state.start+"&search="+this.state.search)
           .then(response => response.json())
           .then(responseJson => {
             console.log(responseJson.length);
@@ -54,7 +54,7 @@ export default class Clients extends Component {
     next = () => {
         const GLOBAL = require('../../Global');
         this.setState({ fetching_from_server_next: true , start : this.state.start + 20}, () => {
-        fetch(GLOBAL.BASE_URL_REG+"WSClient/listeClients?ent_num=500002&start="+this.state.start+"&search="+this.state.search)
+        fetch(GLOBAL.BASE_URL_REG+"WSClient/listeClients?ent_num="+global.currentEnt+"&start="+this.state.start+"&search="+this.state.search)
             .then(response => response.json())
             .then(responseJson => {
               this.setState({
@@ -72,7 +72,7 @@ export default class Clients extends Component {
       this.setState({ search:search });
       const GLOBAL = require('../../Global');
         this.setState({start : 0}, () => {
-        fetch(GLOBAL.BASE_URL_REG+"WSClient/listeClients?ent_num=500002&start="+this.state.start+"&search="+search)
+        fetch(GLOBAL.BASE_URL_REG+"WSClient/listeClients?ent_num="+global.currentEnt+"&start="+this.state.start+"&search="+search)
             .then(response => response.json())
             .then(responseJson => {
               this.setState({

@@ -21,7 +21,7 @@ export default class SituationClient extends Component {
 
     componentDidMount(){
         const GLOBAL = require('../../Global');
-        fetch(GLOBAL.BASE_URL_REG+"WSClient/situationClient?ent_num=500002&clt_id="+this.props.clt_id)
+        fetch(GLOBAL.BASE_URL_REG+"WSClient/situationClient?ent_num="+global.currentEnt+"&clt_id="+this.props.clt_id)
         .then(response => response.json())
         .then((responseJson)=> {
           this.setState({
@@ -30,7 +30,7 @@ export default class SituationClient extends Component {
         })
         .catch(error=>console.log(error)) //to catch the errors if any
 
-        fetch(GLOBAL.BASE_URL_REG+"WSClient/getClient?ent_num=500002&clt_id="+this.props.clt_id)
+        fetch(GLOBAL.BASE_URL_REG+"WSClient/getClient?ent_num="+global.currentEnt+"&clt_id="+this.props.clt_id)
         .then(response => response.json())
         .then((responseJson)=> {
           this.setState({
@@ -39,7 +39,7 @@ export default class SituationClient extends Component {
         })
         .catch(error=>console.log(error)) //to catch the errors if any
 
-        fetch(GLOBAL.BASE_URL_REG+"WSFacture/listeFactures?ent_num=500002&clt_id="+this.props.clt_id+"&etat=1")
+        fetch(GLOBAL.BASE_URL_REG+"WSFacture/listeFactures?ent_num="+global.currentEnt+"&clt_id="+this.props.clt_id+"&etat=1")
         .then(response => response.json())
         .then((responseJson)=> {
             this.setState({
@@ -118,7 +118,7 @@ export default class SituationClient extends Component {
                         contentFontSize={ 20 }
                         titleFontSize={ 18 }
                         style={ cardStyle }
-                        content={this.state.situation.totalMontantReglements}
+                        content={this.state.situation.totalMontantNonVentile}
                     />
                     <CardViewWithIcon
                         withBackground={ false }
@@ -148,7 +148,7 @@ export default class SituationClient extends Component {
                         androidIcon={ 'ios-call' }
                         iconHeight={ 30 }
                         iconColor={ 'green' }
-                        title={ 'Appler' }
+                        title={ 'Appeler' }
                         titleFontSize={ 20 }
                         style={ cardStyle }
                         onPress={() => this._call(this.state.client.clt_tel)}

@@ -132,7 +132,7 @@ export default class DrawerContent extends Component {
                                     style={{
                                         fontSize: 15,marginLeft: 20,color : global.currentEnt === item.ent_num ? '#fff' : '#000'
                                     }}
-                                    onPress={() => { global.currentEnt = item.ent_num}}>
+                                    onPress={() => { global.currentEnt = item.ent_num ;  this._navigate('accueil') }}>
                                     {item.ent_raisonsocial}
                                 </Text>
                             </View>
@@ -169,23 +169,6 @@ export default class DrawerContent extends Component {
 
                 </ScrollView>
             </View>
-            // <ScrollView style={styles.container}>
-            //      <TouchableOpacity style={styles.button} onPress={Actions.accueil}>
-            //         <Text style={styles.controlText}>Accueil</Text>
-            //     </TouchableOpacity>
-            //     <TouchableOpacity style={styles.button} onPress={Actions.factures}>
-            //         <Text style={styles.controlText}>Factures</Text>
-            //     </TouchableOpacity>
-            //     <TouchableOpacity style={styles.button} onPress={Actions.clients}>
-            //         <Text style={styles.controlText}>Clients</Text>
-            //     </TouchableOpacity>
-            //     <TouchableOpacity style={styles.button} onPress={Actions.reglements}>
-            //         <Text style={styles.controlText}>Reglements</Text>
-            //     </TouchableOpacity>
-            //     <TouchableOpacity style={styles.button}>
-            //         <Text style={styles.controlText}>Deconnexion</Text>
-            //     </TouchableOpacity>
-            // </ScrollView>
         )
 	}
 }
