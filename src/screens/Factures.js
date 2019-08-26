@@ -148,7 +148,7 @@ export default class Factures extends Component {
                     activeOpacity={0.9}
                     onPress={() => this.prev()}
                     style={styles.loadMoreBtn}>
-                    <Text style={styles.btnText}>Precedent</Text>
+                    <Text style={styles.btnText}>Précédent</Text>
                     {this.state.fetching_from_server_prev ? (
                     <ActivityIndicator color="white" style={{ marginLeft: 8 }} />
                     ) : null}
@@ -190,6 +190,7 @@ const styles = StyleSheet.create({
       flexDirection: 'row',
       justifyContent: 'center',
       alignItems: 'center',
+      margin:10
     },
     btnText: {
       color: 'white',

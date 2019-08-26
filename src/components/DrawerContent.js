@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { StyleSheet, Text,View,ScrollView,TouchableOpacity,Image} from 'react-native';
+import { StyleSheet, Text,View,ScrollView,AsyncStorage,Image} from 'react-native';
 import { Icon } from 'react-native-elements';
 import {Actions} from 'react-native-router-flux';
 
@@ -35,20 +35,46 @@ export default class DrawerContent extends Component {
                     navOptionName: 'Règlements',
                     screenToNavigate: 'reglements',
                 }
-            ]
+            ],
+            util_mail:'',
+            util_nom:''  
         }
     }
 
+    async userLogout() {
+        try {
+            const keys = ['util_id', 'ent_default','cli_num', 'util_nom', 'util_mail']
+            await AsyncStorage.multiRemove(keys)
+            Actions.login();
+        } catch (error) {
+          console.log('AsyncStorage error: ' + error.message);
+        }
+      }
+
     componentDidMount(){
-        const GLOBAL = require('../../Global');
-        fetch(GLOBAL.BASE_URL_LIC+"entrepriseParClient/000001/"+GLOBAL.APP_ID)
-        .then(response => response.json())
-        .then((responseJson)=> {
-            this.setState({
-                entreprises : responseJson
-            })
-        })
-        .catch(error=>console.log(error)) //to catch the errors if any
+        AsyncStorage.getItem('cli_num').then((cli_num) => {
+            if( cli_num !== null){
+                const GLOBAL = require('../../Global');
+                fetch(GLOBAL.BASE_URL_LIC+"entrepriseParClient/"+ cli_num +"/"+GLOBAL.APP_ID)
+                .then(response => response.json())
+                .then((responseJson)=> {
+                    this.setState({
+                        entreprises : responseJson
+                    })
+                })
+                .catch(error=>console.log(error)) //to catch the errors if any
+            }
+        });
+        AsyncStorage.getItem('util_mail').then((util_mail) => {
+            if( util_mail !== null){
+                this.setState({ util_mail: util_mail })
+            }
+        });
+        AsyncStorage.getItem('util_nom').then((util_nom) => {
+            if( util_nom !== null){
+                this.setState({util_nom:util_nom })
+            }
+        });
     }
 
     _navigate(screen){
@@ -66,8 +92,8 @@ export default class DrawerContent extends Component {
                         source={require('../../assets/photo_default.png')}
                         style={styles.sideMenuProfileIcon}
                         />
-                        <Text style={styles.textCenter}>Miangaly Manao</Text>
-                        <Text style={styles.textCenter}>miangaly.manao@gmail.com</Text>
+                        <Text style={styles.textCenter}>{this.state.util_nom}</Text>
+                        <Text style={styles.textCenter}>{this.state.util_mail}</Text>
                     </View>
 
                     {/*Divider between Top Image and Sidebar Option*/}
@@ -126,7 +152,7 @@ export default class DrawerContent extends Component {
                                 alignItems: 'center',
                                 paddingTop: 10,
                                 paddingBottom: 10,
-                                backgroundColor: global.currentEnt === item.ent_num ? '#50AFA1' : '#ffffff',
+                                backgroundColor: global.currentEnt === item.ent_num ? '#13b5b4' : '#ffffff',
                             }}>
                                 <Text
                                     style={{
@@ -162,7 +188,7 @@ export default class DrawerContent extends Component {
                             style={{
                             fontSize: 15
                             }}
-                            onPress={() => { }}>
+                            onPress={() => {this.userLogout()}}>
                             Déconnexion
                         </Text>
                     </View>

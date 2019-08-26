@@ -17,95 +17,121 @@ import SituationClient from '../src/screens/SituationClient';
 
 import DrawerContent from './components/DrawerContent';
 
+import {ActivityIndicator, AsyncStorage} from 'react-native';
+
 export default class Routes extends Component {
+    constructor() {
+        super();
+        this.state = { loggedIn: false, isLoaded: false };
+      }
+    
+      componentDidMount() {
+        AsyncStorage.getItem('util_id').then((util_id) => {
+            this.setState({ loggedIn: util_id !== null })
+        });
+        AsyncStorage.getItem('ent_default').then((ent_default) => {
+            this.setState({ isLoaded: true })
+            if( ent_default !== null){
+                global.currentEnt = ent_default
+            }
+        });
+      }
+
     render() {
-        return (
-            <Router 
-            hideNavBar={false} 
-            navigationBarStyle={styles.navBar} 
-            titleStyle={{color: 'white'}}
-            >
-                <Scene key='drawer'
-                drawer={true}
-                contentComponent={DrawerContent}
-                hideBackImage
-                drawerImage = {
-                    require('../assets/hamburger.png')
-                    }
-                hideNavBar>    
-                <Scene key="root">
-                    <Scene key="login"
-                        component={Login}
-                        title="Login"
-                        type="reset"
-                        hideNavBar
-                        drawerLockMode = {'locked-closed'}
-                        initial
-                         />                
-                    <Scene 
-                        key="accueil"
-                        component={Accueil}
-                        title="Accueil"
-                    /> 
-                    <Scene 
-                        key="factures"
-                        component={Factures}
-                        title="Factures"
-                    /> 
-                     <Scene 
-                        key="facturesImpayees"
-                        component={FacturesImpayees}
-                        title="Factures impayées"
-                    /> 
-                    <Scene 
-                        key="facturesPayees"
-                        component={FacturesPayees}
-                        title="Factures payées"
-                    /> 
-                    <Scene 
-                        key="facturesRetards"
-                        component={FacturesRetards}
-                        title="Factures en retard de paiement"
-                    /> 
-                    <Scene 
-                        key="facturesAvoirs"
-                        component={FacturesAvoirs}
-                        title="Factures d'avoir à regler"
-                    /> 
-                     <Scene 
-                        key="facture"
-                        component={Facture}
-                        title="Facture"
-                    /> 
-                     <Scene 
-                        key="clients"
-                        component={Clients}
-                        title="Clients"
-                    /> 
-                     <Scene 
-                        key="clientsRelance"
-                        component={ClientsRelance}
-                        title="Clients à relancer"
-                    /> 
-                     <Scene 
-                        key="situationClient"
-                        component={SituationClient}
-                        title="Situation client"
-                    /> 
-                    <Scene 
-                        key="reglements"
-                        component={Reglements}
-                        title="Reglements"
-                    /> 
-                    <Scene 
-                        key="reglement"
-                        component={Reglement}
-                        title="Reglement"
-                    /> 
-                </Scene>
-                </Scene>
-            </Router>
-        )
+        if (!this.state.isLoaded) {
+            return (
+              <ActivityIndicator />
+            )
+        }else {
+            return (
+                <Router 
+                hideNavBar={false} 
+                navigationBarStyle={styles.navBar} 
+                titleStyle={{color: 'white'}}
+                >
+                    <Scene key='drawer'
+                    drawer={true}
+                    contentComponent={DrawerContent}
+                    hideBackImage
+                    drawerImage = {
+                        require('../assets/hamburger.png')
+                        }
+                    hideNavBar>    
+                    <Scene key="root">
+                        <Scene key="login"
+                            component={Login}
+                            title="Login"
+                            type="reset"
+                            hideNavBar
+                            drawerLockMode = {'locked-closed'}
+                            initial={!this.state.loggedIn}
+                            />                
+                        <Scene 
+                            key="accueil"
+                            component={Accueil}
+                            title="Accueil"
+                            initial={this.state.loggedIn}
+                        /> 
+                        <Scene 
+                            key="factures"
+                            component={Factures}
+                            title="Factures"
+                        /> 
+                        <Scene 
+                            key="facturesImpayees"
+                            component={FacturesImpayees}
+                            title="Factures impayées"
+                        /> 
+                        <Scene 
+                            key="facturesPayees"
+                            component={FacturesPayees}
+                            title="Factures payées"
+                        /> 
+                        <Scene 
+                            key="facturesRetards"
+                            component={FacturesRetards}
+                            title="Factures en retard de paiement"
+                        /> 
+                        <Scene 
+                            key="facturesAvoirs"
+                            component={FacturesAvoirs}
+                            title="Factures d'avoir à regler"
+                        /> 
+                        <Scene 
+                            key="facture"
+                            component={Facture}
+                            title="Facture"
+                        /> 
+                        <Scene 
+                            key="clients"
+                            component={Clients}
+                            title="Clients"
+                        /> 
+                        <Scene 
+                            key="clientsRelance"
+                            component={ClientsRelance}
+                            title="Clients à relancer"
+                        /> 
+                        <Scene 
+                            key="situationClient"
+                            component={SituationClient}
+                            title="Situation client"
+                        /> 
+                        <Scene 
+                            key="reglements"
+                            component={Reglements}
+                            title="Reglements"
+                        /> 
+                        <Scene 
+                            key="reglement"
+                            component={Reglement}
+                            title="Reglement"
+                        /> 
+                    </Scene>
+                    </Scene>
+                </Router>
+            )
+        }
     }
 }
 

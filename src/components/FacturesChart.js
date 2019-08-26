@@ -2,6 +2,7 @@ import React from 'react'
 import { PieChart } from 'react-native-svg-charts'
 import { Text } from 'react-native-svg'
 import {Actions} from 'react-native-router-flux';
+import { AsyncStorage} from 'react-native';
 
 class FacturesChart extends React.PureComponent {
     constructor(props) {
@@ -14,17 +15,23 @@ class FacturesChart extends React.PureComponent {
     }
 
     componentDidMount(){
-        const GLOBAL = require('../../Global');
-        fetch(GLOBAL.BASE_URL_REG+"WSFacture/factureChart?ent_num="+global.currentEnt)
-        .then(response => response.json())
-        .then((responseJson)=> {
-          this.setState({
-            nbPayees : responseJson.nbPayees,
-            nbEnRetard : responseJson.nbEnRetard,
-            nbImpayees : responseJson.nbImpayees
-          })
-        })
-        .catch(error=>console.log(error)) //to catch the errors if any
+        AsyncStorage.getItem('ent_default').then((ent_default) => {
+            if( ent_default !== null){
+                global.currentEnt = ent_default
+            }
+
+            const GLOBAL = require('../../Global');
+            fetch(GLOBAL.BASE_URL_REG+"WSFacture/factureChart?ent_num="+global.currentEnt)
+            .then(response => response.json())
+            .then((responseJson)=> {
+              this.setState({
+                nbPayees : responseJson.nbPayees,
+                nbEnRetard : responseJson.nbEnRetard,
+                nbImpayees : responseJson.nbImpayees
+              })
+            })
+            .catch(error=>console.log(error)) //to catch the errors if any
+        });       
     }
 
     render() {

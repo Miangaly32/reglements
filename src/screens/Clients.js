@@ -187,6 +187,7 @@ export default class Clients extends Component {
         flexDirection: 'row',
         justifyContent: 'center',
         alignItems: 'center',
+        margin:10
       },
       btnText: {
         color: 'white',

@@ -2,22 +2,72 @@ import React, { Component } from 'react';
 import { StyleSheet, View, TextInput, TouchableOpacity, Image } from 'react-native';
 import {Text} from 'react-native-elements';
 import {Actions} from 'react-native-router-flux';
-
+import { AsyncStorage} from 'react-native';
 
 export default class Login extends Component {
   constructor(props){        
 		super(props);        
 		this.state={            
-			email:'',
+			login:'',
 			password: ''        
     }   
   
   }
   
+  async saveItem(item, selectedValue) {
+    try {
+      await AsyncStorage.setItem(item, selectedValue);
+    } catch (error) {
+      console.error('AsyncStorage error: ' + error.message);
+    }
+  }
+
   login = async() =>{
-    const {email,password} = this.state;
-    Actions.accueil();
-    global.currentEnt = '500002' ;// a changer
+    const {login,password} = this.state;
+    const GLOBAL = require('../../Global');
+    fetch(GLOBAL.BASE_URL_COMPTE+"WSAuth/login", {
+      method: 'POST',
+      headers: new Headers({
+        'Content-Type': 'application/x-www-form-urlencoded',
+      }),
+      body: "login="+login+"&password="+password 
+    }).then((response) => response.json())
+    .then((responseJson) => {
+      if(responseJson!=null){
+        fetch(GLOBAL.BASE_URL_REG+"WSAuth/obtenirInfoUtilisateur", {
+          method: 'POST',
+          headers: new Headers({
+            'Content-Type': 'application/x-www-form-urlencoded',
+          }),
+          body: "ent_num="+responseJson.ent_default+"&util_id="+responseJson.util_id 
+        }).then((response) => response.json())
+        .then((responseData) => {
+            if(responseData==1){
+              this.saveItem('util_id', responseJson.util_id)
+              this.saveItem('ent_default', responseJson.ent_default)
+              this.saveItem('cli_num', responseJson.cli_num)
+              this.saveItem('util_nom', responseJson.util_prenom+" "+responseJson.util_nom)
+              this.saveItem('util_mail', responseJson.util_mail)
+
+              Actions.accueil()
+            }else if(responseData==4){
+              alert("L'entreprise n'a pas accès au logiciel")
+            }else{
+              alert("L'utilisateur n'a pas accès au logiciel")
+            }
+          } 
+        )
+        .catch((error) => {
+          console.error(error);
+        })
+      }
+      else{
+        alert("Vérifiez votre identifiant ou mot de passe")
+      }
+    })
+    .catch((error) => {
+      console.error(error);
+    });
   }
 
 	render() {
@@ -30,7 +80,7 @@ export default class Login extends Component {
                 <Text h4 style={{margin:10}}>MANAO REGLEMENT</Text>
                 
                 <TextInput style={styles.inputBox}
-                onChangeText={(email) => this.setState({email})}
+                onChangeText={(login) => this.setState({login})}
                 underlineColorAndroid='rgba(0,0,0,0)' 
                 placeholder="Identifiant"
                 placeholderTextColor = "#002f6c"

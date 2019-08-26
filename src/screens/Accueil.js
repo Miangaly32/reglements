@@ -7,6 +7,8 @@ import {Text,Button,Icon} from 'react-native-elements';
 import {Actions} from 'react-native-router-flux';
 import { CardViewWithIcon } from "react-native-simple-card-view";
 
+import { AsyncStorage} from 'react-native';
+
 export default class Accueil extends Component {
     constructor(props) {
         super(props);
@@ -25,42 +27,47 @@ export default class Accueil extends Component {
     }
 
     componentDidMount(){
-        const GLOBAL = require('../../Global');
-        fetch(GLOBAL.BASE_URL_REG+"WSFacture/dashboard?ent_num="+global.currentEnt)
-        .then(response => response.json())
-        .then((responseJson)=> {
-          this.setState({
-            nbAvoir : responseJson.nbAvoir,
-            nbClientRelance : responseJson.nbClientRelance,
-            montantAvoir : responseJson.montantAvoir,
-            montantRelance : responseJson.montantRelance
-          })
-        })
-        .catch(error=>console.log(error)) //to catch the errors if any
+        AsyncStorage.getItem('ent_default').then((ent_default) => {
+            if( ent_default !== null){
+                global.currentEnt = ent_default
 
-        fetch(GLOBAL.BASE_URL_REG+"WSFacture/factureChart?ent_num="+global.currentEnt)
-        .then(response => response.json())
-        .then((responseJson)=> {
-          this.setState({
-            nbPayees : responseJson.nbPayees,
-            nbEnRetard : responseJson.nbEnRetard,
-            nbImpayees : responseJson.nbImpayees
-          })
-        })
-        .catch(error=>console.log(error)) //to catch the errors if any
-
-        fetch(GLOBAL.BASE_URL_REG+"WSExercice/getExercices?ent_num="+global.currentEnt)
-        .then(response => response.json())
-        .then((responseJson)=> {
-            if(responseJson.length>0){
-                this.setState({
-                    exercices : responseJson,
-                    exercice_reg : responseJson[0].exe_id
-                }) 
+                const GLOBAL = require('../../Global');
+                fetch(GLOBAL.BASE_URL_REG+"WSFacture/dashboard?ent_num="+global.currentEnt)
+                .then(response => response.json())
+                .then((responseJson)=> {
+                  this.setState({
+                    nbAvoir : responseJson.nbAvoir,
+                    nbClientRelance : responseJson.nbClientRelance,
+                    montantAvoir : responseJson.montantAvoir,
+                    montantRelance : responseJson.montantRelance
+                  })
+                })
+                .catch(error=>console.log(error)) //to catch the errors if any
+        
+                fetch(GLOBAL.BASE_URL_REG+"WSFacture/factureChart?ent_num="+global.currentEnt)
+                .then(response => response.json())
+                .then((responseJson)=> {
+                  this.setState({
+                    nbPayees : responseJson.nbPayees,
+                    nbEnRetard : responseJson.nbEnRetard,
+                    nbImpayees : responseJson.nbImpayees
+                  })
+                })
+                .catch(error=>console.log(error)) //to catch the errors if any
+        
+                fetch(GLOBAL.BASE_URL_REG+"WSExercice/getExercices?ent_num="+global.currentEnt)
+                .then(response => response.json())
+                .then((responseJson)=> {
+                    if(responseJson.length>0){
+                        this.setState({
+                            exercices : responseJson,
+                            exercice_reg : responseJson[0].exe_id
+                        }) 
+                    }
+                })
+                .catch(error=>console.log(error)) //to catch the errors if any
             }
-        })
-        .catch(error=>console.log(error)) //to catch the errors if any
-
+        });
     }
 
     _alertIndex(index) {
@@ -83,7 +90,7 @@ export default class Accueil extends Component {
 
         return (
         <ScrollView >   
-            <View style={styles.container}> 
+            <View style={styles.container}>  
             <View style={ {flexDirection: "row"} }>
                 <CardViewWithIcon
                     withBackground={ false }
