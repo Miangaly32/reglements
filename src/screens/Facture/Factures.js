@@ -6,7 +6,7 @@ import call from 'react-native-phone-call';
 import {Actions} from 'react-native-router-flux';
 import { Linking } from 'react-native';
 
-export default class FacturesImpayees extends Component {
+export default class Factures extends Component {
 
     constructor(props) {
         super(props);
@@ -18,12 +18,11 @@ export default class FacturesImpayees extends Component {
           start :0,
           search: ''
         }
-        global.currentScreenIndex = 1;
     }
 
     componentDidMount(){
-        const GLOBAL = require('../../Global');
-        fetch(GLOBAL.BASE_URL_REG+"WSFacture/getFacturesEnRetards?ent_num="+global.currentEnt+"&start="+this.state.start)
+        const GLOBAL = require('../../../Global');
+        fetch(GLOBAL.BASE_URL_REG+"WSFacture/listeFactures?ent_num="+global.currentEnt+"&start="+this.state.start)
         .then(response => response.json())
         .then((responseJson)=> {
           this.setState({
@@ -34,9 +33,9 @@ export default class FacturesImpayees extends Component {
     }
 
     prev = () => {
-        const GLOBAL = require('../../Global');
+        const GLOBAL = require('../../../Global');
         this.setState({ fetching_from_server_prev: true , start : this.state.start - 20}, () => {
-        fetch(GLOBAL.BASE_URL_REG+"WSFacture/getFacturesEnRetards?ent_num="+global.currentEnt+"&start="+this.state.start+"&search="+this.state.search)
+        fetch(GLOBAL.BASE_URL_REG+"WSFacture/listeFactures?ent_num="+global.currentEnt+"&start="+this.state.start+"&search="+this.state.search)
             .then(response => response.json())
             .then(responseJson => {
               this.setState({
@@ -51,7 +50,7 @@ export default class FacturesImpayees extends Component {
       };
   
       next = () => {
-          const GLOBAL = require('../../Global');
+          const GLOBAL = require('../../../Global');
           this.setState({ fetching_from_server_next: true , start : this.state.start + 20}, () => {
           fetch(GLOBAL.BASE_URL_REG+"WSFacture/listeFactures?ent_num="+global.currentEnt+"&start="+this.state.start+"&search="+this.state.search)
               .then(response => response.json())
@@ -69,7 +68,7 @@ export default class FacturesImpayees extends Component {
 
       _search = search => {
         this.setState({ search:search });
-        const GLOBAL = require('../../Global');
+        const GLOBAL = require('../../../Global');
           this.setState({start : 0}, () => {
           fetch(GLOBAL.BASE_URL_REG+"WSFacture/listeFactures?ent_num="+global.currentEnt+"&start="+this.state.start+"&search="+search)
               .then(response => response.json())
@@ -112,11 +111,11 @@ export default class FacturesImpayees extends Component {
                 <Icon type='ionicon' name='md-eye'/>
                 </TouchableOpacity>
                 <TouchableOpacity style={{marginLeft:5}} onPress={() => this._openMail(clt_mail)}>
-                <Icon name='mail'/>
+                <Icon type='ionicon' name='md-mail' color='red' />
                 </TouchableOpacity>
                 <TouchableOpacity style={{marginLeft:5}} onPress={() => this._call(clt_tel)}>
-                    <Icon  name='call'/> 
-                 </TouchableOpacity>
+                    <Icon type='ionicon' name='md-call' color='green' /> 
+                </TouchableOpacity>
             </View>         
         );
 
@@ -128,8 +127,8 @@ export default class FacturesImpayees extends Component {
                     onChangeText={this._search}
                     value={this.state.search}
                 />
-                <Table borderStyle={{borderColor: 'transparent'}}>
-                <Row widthArr={[80,65,75,110,80]} data={state.tableHead} style={styles.head} textStyle={styles.text}/>
+                <Table borderStyle={{borderColor: '#f9f9f9'}} style={{marginTop:10}}>
+                <Row widthArr={[80,65,75,110,80]} data={state.tableHead} style={styles.head} textStyle={styles.textHead}/>
                 {
                     state.tableData.map((rowData, index) => (
                     <TableWrapper key={index} style={styles.row}  > 
@@ -149,7 +148,7 @@ export default class FacturesImpayees extends Component {
                     activeOpacity={0.9}
                     onPress={() => this.prev()}
                     style={styles.loadMoreBtn}>
-                    <Text style={styles.btnText}>Precedent</Text>
+                    <Text style={styles.btnText}>Précédent</Text>
                     {this.state.fetching_from_server_prev ? (
                     <ActivityIndicator color="white" style={{ marginLeft: 8 }} />
                     ) : null}
@@ -173,9 +172,10 @@ export default class FacturesImpayees extends Component {
 
 const styles = StyleSheet.create({
     container: { flex: 1, backgroundColor: '#fff' },
-    head: { height: 40, backgroundColor: '#808B97' },
-    row: { flexDirection: 'row', backgroundColor: '#FFF1C1' },
+    head: { height: 40, backgroundColor: '#000', },
+    textHead: { margin: 6,color:'#fff' },
     text: { margin: 6 ,textAlign:'center'},
+    row: { flexDirection: 'row', backgroundColor: '#fff' },
     action: { width: 58, height: 18,flexDirection: 'row' },
     list:{paddingVertical: 4, margin: 5,backgroundColor: "#fff"},
     footer: {
@@ -186,7 +186,7 @@ const styles = StyleSheet.create({
     },
     loadMoreBtn: {
       padding: 10,
-      backgroundColor: '#800000',
+      backgroundColor: '#13b5b4',
       borderRadius: 4,
       flexDirection: 'row',
       justifyContent: 'center',

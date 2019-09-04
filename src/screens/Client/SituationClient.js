@@ -20,7 +20,7 @@ export default class SituationClient extends Component {
     }
 
     componentDidMount(){
-        const GLOBAL = require('../../Global');
+        const GLOBAL = require('../../../Global');
         fetch(GLOBAL.BASE_URL_REG+"WSClient/situationClient?ent_num="+global.currentEnt+"&clt_id="+this.props.clt_id)
         .then(response => response.json())
         .then((responseJson)=> {
@@ -38,8 +38,7 @@ export default class SituationClient extends Component {
           })
         })
         .catch(error=>console.log(error)) //to catch the errors if any
-
-        fetch(GLOBAL.BASE_URL_REG+"WSFacture/listeFactures?ent_num="+global.currentEnt+"&clt_id="+this.props.clt_id+"&etat=1")
+        fetch(GLOBAL.BASE_URL_REG+"WSFacture/listeFactures?ent_num="+global.currentEnt+"&clt_id="+this.props.clt_id+"&etat=0")
         .then(response => response.json())
         .then((responseJson)=> {
             this.setState({
@@ -135,7 +134,7 @@ export default class SituationClient extends Component {
                 <View style={styles.situation}>
                     <CardViewWithIcon
                         withBackground={ false }
-                        androidIcon={ 'ios-mail' }
+                        androidIcon={ 'md-mail' }
                         iconHeight={ 30 }
                         iconColor={ 'red' }
                         title={ 'Contacter par email' }
@@ -145,7 +144,7 @@ export default class SituationClient extends Component {
                     />
                     <CardViewWithIcon
                         withBackground={ false }
-                        androidIcon={ 'ios-call' }
+                        androidIcon={ 'md-call' }
                         iconHeight={ 30 }
                         iconColor={ 'green' }
                         title={ 'Appeler' }
@@ -154,9 +153,9 @@ export default class SituationClient extends Component {
                         onPress={() => this._call(this.state.client.clt_tel)}
                     />
                 </View>
-                <Text h3 style={{textAlign:'center'}}>Factures impayées</Text>
-                <Table borderStyle={{borderColor: 'transparent'}}>
-                    <Row widthArr={[70,75,140,140]} data={this.state.tableHead} style={styles.head} textStyle={styles.text} />
+                <Text h3 style={{textAlign:'center',marginTop:20}}>Factures impayées</Text>
+                <Table borderStyle={{borderColor: '#f9f9f9'}}>
+                    <Row widthArr={[70,75,140,140]} data={this.state.tableHead} style={styles.head} textStyle={styles.textHead} />
                     {
                         this.state.tableData.map((rowData, index) => (
                         <TableWrapper key={index} style={styles.row}  > 
@@ -179,7 +178,8 @@ export default class SituationClient extends Component {
 const styles = StyleSheet.create({
     container: { flex: 1, padding: 3, backgroundColor: '#fff' },
     situation: { flexDirection: 'row', marginTop:20,alignItems:'center',justifyContent  : 'center' },
-    text: { margin: 6 ,textAlign:'center'},
-    head: { height: 40, backgroundColor: '#808B97' },
-    row: { flexDirection: 'row', backgroundColor: '#FFF1C1' }
+    text: { margin: 6,textAlign:'center' },
+    head: { height: 40, backgroundColor: '#000', },
+    textHead: { margin: 6,color:'#fff' },
+    row: { flexDirection: 'row', backgroundColor: '#fff' }
 });

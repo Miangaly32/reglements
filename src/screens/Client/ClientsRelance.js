@@ -10,14 +10,14 @@ export default class ClientsRelance extends Component {
     constructor(props) {
         super(props);
         this.state = {
-          tableHead: ['Numero', 'Societe', 'Actions'],
+          tableHead: ['Numéro', 'Société', 'Actions'],
           tableData: [[]]
         }
         global.currentScreenIndex = 2;
     }
     
     componentDidMount(){
-      const GLOBAL = require('../../Global');
+      const GLOBAL = require('../../../Global');
       fetch(GLOBAL.BASE_URL_REG+"WSFacture/clientsARelancer?ent_num="+global.currentEnt)
       .then(response => response.json())
       .then((responseJson)=> {
@@ -52,22 +52,26 @@ export default class ClientsRelance extends Component {
         const state = this.state;
         const element = (tel,clt_id,mail) => (         
             <View style={styles.action}>
-                <TouchableOpacity onPress={() => this._voirClient(clt_id)}>
+                <TouchableOpacity style={{marginLeft:5}} onPress={() => this._voirClient(clt_id)}>
                 <Icon type='ionicon' name='md-eye'/>
                 </TouchableOpacity>
                 <TouchableOpacity style={{marginLeft:20}} onPress={() => this._openMail(mail)}>
-                <Icon name='mail'/>
+                <Icon type='ionicon' name='md-mail' color='red'/>
                 </TouchableOpacity>
                 <TouchableOpacity style={{marginLeft:20}} onPress={() => this._call(tel)}>
-                    <Icon  name='call'/> 
+                    <Icon type='ionicon' name='md-call' color='green'/> 
                  </TouchableOpacity>
             </View>         
         );
 
         return (
           <View style={styles.container}>
-            <Table borderStyle={{borderColor: 'transparent'}}>
-              <Row widthArr={[75,200,150]} data={state.tableHead} style={styles.head} textStyle={styles.text}/>
+            <View style={{margin:10}}>
+                <Text h4>Liste des clients ayant des factures en retard de paiement ou dont l'échéance est bientôt</Text>
+            </View>
+            
+            <Table borderStyle={{borderColor: '#f9f9f9'}}>
+              <Row widthArr={[75,200,150]} data={state.tableHead} style={styles.head} textStyle={styles.textHead}/>
               {
                  state.tableData.map((rowData, index) => (
                   <TableWrapper key={index} style={styles.row}  > 
@@ -85,24 +89,16 @@ export default class ClientsRelance extends Component {
      
     const styles = StyleSheet.create({
       container: { flex: 1, backgroundColor: '#fff' },
-      head: { height: 40, backgroundColor: '#808B97' },
-      text: { margin: 6 },
-      row: { flexDirection: 'row', backgroundColor: '#FFF1C1' },
-      action: { width: 58, height: 18,flexDirection: 'row' },
+      head: { height: 40, backgroundColor: '#000'},
+      textHead: { margin: 6,color:'#fff' },
+      text: { margin: 6 ,textAlign:'center'},
+      row: { flexDirection: 'row', backgroundColor: '#fff' },
+      action: { width: 58, height: 18,flexDirection: 'row'},
       footer: {
         padding: 10,
         justifyContent: 'center',
         alignItems: 'center',
         flexDirection: 'row',
-      },
-      loadMoreBtn: {
-        padding: 10,
-        backgroundColor: '#800000',
-        borderRadius: 4,
-        flexDirection: 'row',
-        justifyContent: 'center',
-        alignItems: 'center',
-        margin:10
       },
       btnText: {
         color: 'white',

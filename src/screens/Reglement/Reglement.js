@@ -15,7 +15,7 @@ export default class Reglement extends Component {
     }
 
     componentDidMount(){
-        const GLOBAL = require('../../Global');
+        const GLOBAL = require('../../../Global');
         fetch(GLOBAL.BASE_URL_REG+"WSReglement/getReglement?ent_num="+global.currentEnt+"&regc_id="+this.props.regc_id)
         .then(response => response.json())
         .then((responseJson)=> {
@@ -51,8 +51,8 @@ export default class Reglement extends Component {
                 </View>
                 <View style={{marginTop:10}}>
                     <Text h4>Détails des paiements</Text>
-                    <Table borderStyle={{borderColor: 'transparent'}}>
-                    <Row  data={state.tableHead} style={styles.head} textStyle={styles.text}/>
+                    <Table borderStyle={{borderColor: '#f9f9f9'}}>
+                    <Row  data={state.tableHead} style={styles.head} textStyle={styles.textHead}/>
                     {
                         state.tableData.map((ventilation, index) => (
                             <TableWrapper key={index} style={styles.row}  >  
@@ -77,7 +77,8 @@ const styles = StyleSheet.create({
       backgroundColor: 'white',
       padding:5
     },
-    head: { height: 40, backgroundColor: '#808B97' },
+    head: { height: 40, backgroundColor: '#000'},
+    textHead: { margin: 6,color:'#fff' },
     text: { margin: 6 ,textAlign:'center'},
-    row: { flexDirection: 'row', backgroundColor: '#FFF1C1' }
+    row: { flexDirection: 'row', backgroundColor: '#fff' }
 });

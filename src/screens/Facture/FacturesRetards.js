@@ -6,12 +6,12 @@ import call from 'react-native-phone-call';
 import {Actions} from 'react-native-router-flux';
 import { Linking } from 'react-native';
 
-export default class FacturesPayees extends Component {
+export default class FacturesImpayees extends Component {
 
     constructor(props) {
         super(props);
         this.state = {
-          tableHead: ['Client', 'N° facture', 'Date dernier paiement','Payé par','Actions'],
+          tableHead: ['Client', 'N° facture', 'Date limite','Reste à payer','Actions'],
           tableData: [[]],
           fetching_from_server_prev: false,
           fetching_from_server_next: false,
@@ -22,8 +22,8 @@ export default class FacturesPayees extends Component {
     }
 
     componentDidMount(){
-        const GLOBAL = require('../../Global');
-        fetch(GLOBAL.BASE_URL_REG+"WSFacture/listeFactures?type=1&ent_num="+global.currentEnt+"&etat=1&start="+this.state.start)
+        const GLOBAL = require('../../../Global');
+        fetch(GLOBAL.BASE_URL_REG+"WSFacture/getFacturesEnRetards?ent_num="+global.currentEnt+"&start="+this.state.start)
         .then(response => response.json())
         .then((responseJson)=> {
           this.setState({
@@ -34,9 +34,9 @@ export default class FacturesPayees extends Component {
     }
 
     prev = () => {
-        const GLOBAL = require('../../Global');
+        const GLOBAL = require('../../../Global');
         this.setState({ fetching_from_server_prev: true , start : this.state.start - 20}, () => {
-        fetch(GLOBAL.BASE_URL_REG+"WSFacture/listeFactures?type=1&ent_num="+global.currentEnt+"&etat=1&start="+this.state.start+"&search="+this.state.search)
+        fetch(GLOBAL.BASE_URL_REG+"WSFacture/getFacturesEnRetards?ent_num="+global.currentEnt+"&start="+this.state.start+"&search="+this.state.search)
             .then(response => response.json())
             .then(responseJson => {
               this.setState({
@@ -51,9 +51,9 @@ export default class FacturesPayees extends Component {
       };
   
       next = () => {
-          const GLOBAL = require('../../Global');
+          const GLOBAL = require('../../../Global');
           this.setState({ fetching_from_server_next: true , start : this.state.start + 20}, () => {
-          fetch(GLOBAL.BASE_URL_REG+"WSFacture/listeFactures?type=1&ent_num="+global.currentEnt+"&etat=1&start="+this.state.start+"&search="+this.state.search)
+          fetch(GLOBAL.BASE_URL_REG+"WSFacture/listeFactures?ent_num="+global.currentEnt+"&start="+this.state.start+"&search="+this.state.search)
               .then(response => response.json())
               .then(responseJson => {
                 this.setState({
@@ -69,9 +69,9 @@ export default class FacturesPayees extends Component {
 
       _search = search => {
         this.setState({ search:search });
-        const GLOBAL = require('../../Global');
+        const GLOBAL = require('../../../Global');
           this.setState({start : 0}, () => {
-          fetch(GLOBAL.BASE_URL_REG+"WSFacture/listeFactures?type=1&ent_num="+global.currentEnt+"&etat=1&start="+this.state.start+"&search="+search)
+          fetch(GLOBAL.BASE_URL_REG+"WSFacture/listeFactures?ent_num="+global.currentEnt+"&start="+this.state.start+"&search="+search)
               .then(response => response.json())
               .then(responseJson => {
                 this.setState({
@@ -129,14 +129,15 @@ export default class FacturesPayees extends Component {
                     value={this.state.search}
                 />
                 <Table borderStyle={{borderColor: 'transparent'}}>
-                <Row widthArr={[80,65,100,85,80]} data={state.tableHead} style={styles.head} textStyle={styles.text}/>
+                <Row widthArr={[80,65,75,110,80]} data={state.tableHead} style={styles.head} textStyle={styles.text}/>
                 {
                     state.tableData.map((rowData, index) => (
                     <TableWrapper key={index} style={styles.row}  > 
                         <Cell width={80} key={0} data={rowData.clt_societe} textStyle={styles.text}/>
                         <Cell width={65} key={1} data={rowData.fac_numero} textStyle={styles.text}/>
-                        {rowData.dateDernierPayement ? ( <Cell width={100} key={2} data={ rowData.dateDernierPayement} textStyle={styles.text}/>) : <Cell key={2}  width={100} data={'-'} textStyle={styles.text}/>}
-                        {rowData.totalmontantpaye>0 ? ( <Cell width={85} key={3} data={'Règlement'} textStyle={styles.text}/>) : <Cell key={3}  width={85} data={'Initialisation'} textStyle={styles.text}/>}                        
+                        {rowData.date_limite_payement == null && rowData.fac_datelimitepaiement == null ? (
+                        <Cell width={75} key={2} data={'-'} textStyle={styles.text}/>) : rowData.date_limite_payement != null ?  <Cell key={2}  width={75} data={rowData.date_limite_payement} textStyle={styles.text}/> : <Cell  width={75} key={2} data={rowData.fac_datelimitepaiement} textStyle={styles.text}/>}   
+                        <Cell width={110}  key={3} data={rowData.reste} textStyle={styles.text}/>      
                         <Cell width={80}  key={4} data={ element(rowData.clt_tel,rowData.fac_id,rowData.clt_mail) } textStyle={styles.text} />
                     </TableWrapper>
                     ))
@@ -148,7 +149,7 @@ export default class FacturesPayees extends Component {
                     activeOpacity={0.9}
                     onPress={() => this.prev()}
                     style={styles.loadMoreBtn}>
-                    <Text style={styles.btnText}>Precedent</Text>
+                    <Text style={styles.btnText}>Précédent</Text>
                     {this.state.fetching_from_server_prev ? (
                     <ActivityIndicator color="white" style={{ marginLeft: 8 }} />
                     ) : null}

@@ -18,7 +18,6 @@ class ReglementChart extends React.PureComponent {
             this.setState({
                 data : responseJson
             })
-           
         })
         .catch(error=>console.log(error)) //to catch the errors if any
     }
@@ -27,7 +26,6 @@ class ReglementChart extends React.PureComponent {
         const axesSvg = { fontSize: 10, fill: 'grey' };
         const verticalContentInset = { top: 10, bottom: 10 }
         const xAxisHeight = 100
-
         return (
             <View style={{ height: 300, flexDirection: 'row' }}>
                 {/* <YAxis

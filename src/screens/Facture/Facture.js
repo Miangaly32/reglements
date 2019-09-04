@@ -15,7 +15,7 @@ export default class Facture extends Component {
     }
 
     componentDidMount(){
-        const GLOBAL = require('../../Global');
+        const GLOBAL = require('../../../Global');
         fetch(GLOBAL.BASE_URL_REG+"WSFacture/getFacture?ent_num="+global.currentEnt+"&fac_id="+this.props.fac_id)
         .then(response => response.json())
         .then((responseJson)=> {

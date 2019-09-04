@@ -2,18 +2,18 @@ import React, { Component } from 'react';
 import {Router, Stack, Scene} from 'react-native-router-flux';
 import Login from '../src/screens/Login';
 import Accueil from '../src/screens/Accueil';
-import Factures from '../src/screens/Factures';
-import Facture from '../src/screens/Facture';
-import FacturesImpayees from '../src/screens/FacturesImpayees';
-import FacturesPayees from '../src/screens/FacturesPayees';
-import FacturesRetards from '../src/screens/FacturesRetards';
-import FacturesAvoirs from '../src/screens/FacturesAvoirs';
-import Clients from '../src/screens/Clients';
-import ClientsRelance from '../src/screens/ClientsRelance';
-import Reglements from '../src/screens/Reglements';
-import Reglement from '../src/screens/Reglement';
+import Factures from '../src/screens/Facture/Factures';
+import Facture from '../src/screens/Facture/Facture';
+import FacturesImpayees from '../src/screens/Facture/FacturesImpayees';
+import FacturesPayees from '../src/screens/Facture/FacturesPayees';
+import FacturesRetards from '../src/screens/Facture/FacturesRetards';
+import FacturesAvoirs from '../src/screens/Facture/FacturesAvoirs';
+import Clients from '../src/screens/Client/Clients';
+import ClientsRelance from '../src/screens/Client/ClientsRelance';
+import Reglements from '../src/screens/Reglement/Reglements';
+import Reglement from '../src/screens/Reglement/Reglement';
 
-import SituationClient from '../src/screens/SituationClient';
+import SituationClient from '../src/screens/Client/SituationClient';
 
 import DrawerContent from './components/DrawerContent';
 
@@ -120,12 +120,12 @@ export default class Routes extends Component {
                         <Scene 
                             key="reglements"
                             component={Reglements}
-                            title="Reglements"
+                            title="Règlements"
                         /> 
                         <Scene 
                             key="reglement"
                             component={Reglement}
-                            title="Reglement"
+                            title="Règlement"
                         /> 
                     </Scene>
                     </Scene>
@@ -140,6 +140,6 @@ const styles = {
         color:'#fff'
     },
     navBar : {
-        backgroundColor: '#0DEADA'
+        backgroundColor: '#13b5b4'
     }
 }

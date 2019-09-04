@@ -11,7 +11,7 @@ export default class Clients extends Component {
     constructor(props) {
         super(props);
         this.state = {
-          tableHead: ['Numero', 'Societe', 'Actions'],
+          tableHead: ['Numéro', 'Société', 'Actions'],
           tableData: [[]],
           fetching_from_server_prev: false,
           fetching_from_server_next: false,
@@ -22,7 +22,7 @@ export default class Clients extends Component {
     }
     
     componentDidMount(){
-      const GLOBAL = require('../../Global');
+      const GLOBAL = require('../../../Global');
       fetch(GLOBAL.BASE_URL_REG+"WSClient/listeClients?ent_num="+global.currentEnt+"&start="+this.state.start)
       .then(response => response.json())
       .then((responseJson)=> {
@@ -34,7 +34,7 @@ export default class Clients extends Component {
     }
 
     prev = () => {
-      const GLOBAL = require('../../Global');
+      const GLOBAL = require('../../../Global');
       this.setState({ fetching_from_server_prev: true , start : this.state.start - 20}, () => {
       fetch(GLOBAL.BASE_URL_REG+"WSClient/listeClients?ent_num="+global.currentEnt+"&start="+this.state.start+"&search="+this.state.search)
           .then(response => response.json())
@@ -52,7 +52,7 @@ export default class Clients extends Component {
     };
 
     next = () => {
-        const GLOBAL = require('../../Global');
+        const GLOBAL = require('../../../Global');
         this.setState({ fetching_from_server_next: true , start : this.state.start + 20}, () => {
         fetch(GLOBAL.BASE_URL_REG+"WSClient/listeClients?ent_num="+global.currentEnt+"&start="+this.state.start+"&search="+this.state.search)
             .then(response => response.json())
@@ -70,7 +70,7 @@ export default class Clients extends Component {
 
     _search = search => {
       this.setState({ search:search });
-      const GLOBAL = require('../../Global');
+      const GLOBAL = require('../../../Global');
         this.setState({start : 0}, () => {
         fetch(GLOBAL.BASE_URL_REG+"WSClient/listeClients?ent_num="+global.currentEnt+"&start="+this.state.start+"&search="+search)
             .then(response => response.json())
@@ -109,15 +109,15 @@ export default class Clients extends Component {
         const state = this.state;
         const element = (clt_tel,clt_id,clt_mail) => (         
             <View style={styles.action}>
-                 <TouchableOpacity onPress={() => this._voirClient(clt_id)}>
+                 <TouchableOpacity style={{marginLeft:20}} onPress={() => this._voirClient(clt_id)}>
                 <Icon type='ionicon' name='md-eye'/>
                 </TouchableOpacity>
                 <TouchableOpacity style={{marginLeft:20}} onPress={() => this._openMail(clt_mail)}>
-                <Icon name='mail'/>
+                <Icon type='ionicon' name='md-mail' color='red' />
                 </TouchableOpacity>
                 <TouchableOpacity style={{marginLeft:20}} onPress={() => this._call(clt_tel)}>
-                    <Icon  name='call'/> 
-                 </TouchableOpacity>
+                    <Icon type='ionicon' name='md-call' color='green' /> 
+                </TouchableOpacity>
             </View>         
         );
 
@@ -129,8 +129,8 @@ export default class Clients extends Component {
               onChangeText={this._search}
               value={this.state.search}
             />
-            <Table borderStyle={{borderColor: 'transparent'}}>
-              <Row widthArr={[75,200,150]} data={state.tableHead} style={styles.head} textStyle={styles.text}/>
+            <Table borderStyle={{borderColor: '#f9f9f9'}} style={{marginTop:10}} >
+              <Row widthArr={[75,200,150]} data={state.tableHead} style={styles.head} textStyle={styles.textHead}/>
               {
                  state.tableData.map((rowData, index) => (
                   <TableWrapper key={index} style={styles.row}  > 
@@ -146,7 +146,7 @@ export default class Clients extends Component {
                 activeOpacity={0.9}
                 onPress={() => this.prev()}
                 style={styles.loadMoreBtn}>
-                <Text style={styles.btnText}>Precedent</Text>
+                <Text style={styles.btnText}>Précédent</Text>
                 {this.state.fetching_from_server_prev ? (
                   <ActivityIndicator color="white" style={{ marginLeft: 8 }} />
                 ) : null}
@@ -169,9 +169,10 @@ export default class Clients extends Component {
      
     const styles = StyleSheet.create({
       container: { flex: 1, backgroundColor: '#fff' },
-      head: { height: 40, backgroundColor: '#808B97' },
-      row: { flexDirection: 'row', backgroundColor: '#FFF1C1' },
-      text: { margin: 6 },
+      head: { height: 40, backgroundColor: '#000', },
+      textHead: { margin: 6,color:'#fff' },
+      text: { margin: 6 ,textAlign:'center'},
+      row: { flexDirection: 'row', backgroundColor: '#fff' },
       action: { width: 58, height: 18,flexDirection: 'row' },
       list:{paddingVertical: 4, margin: 5,backgroundColor: "#fff"},
       footer: {
@@ -182,7 +183,7 @@ export default class Clients extends Component {
       },
       loadMoreBtn: {
         padding: 10,
-        backgroundColor: '#800000',
+        backgroundColor: '#13b5b4',
         borderRadius: 4,
         flexDirection: 'row',
         justifyContent: 'center',

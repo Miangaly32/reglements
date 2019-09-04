@@ -2,28 +2,26 @@ import React, { Component } from 'react';
 import { StyleSheet, View,ScrollView, TouchableOpacity, Alert,ActivityIndicator } from 'react-native';
 import { Table, TableWrapper, Row, Cell } from 'react-native-table-component';
 import { Icon,SearchBar ,Text } from 'react-native-elements';
-import call from 'react-native-phone-call';
 import {Actions} from 'react-native-router-flux';
-import { Linking } from 'react-native';
 
-export default class FacturesImpayees extends Component {
+export default class Reglements extends Component {
 
     constructor(props) {
         super(props);
         this.state = {
-          tableHead: ['Client', 'N° facture', 'Date limite','Reste à payer','Actions'],
+          tableHead: ['Client', 'N° facture', 'Montant','Montant disponible','Actions'],
           tableData: [[]],
           fetching_from_server_prev: false,
           fetching_from_server_next: false,
           start :0,
           search: ''
         }
-        global.currentScreenIndex = 1;
+        global.currentScreenIndex = 3;
     }
 
     componentDidMount(){
-        const GLOBAL = require('../../Global');
-        fetch(GLOBAL.BASE_URL_REG+"WSFacture/listeFactures?type=2&ent_num="+global.currentEnt+"&etat=0&start="+this.state.start)
+        const GLOBAL = require('../../../Global');
+        fetch(GLOBAL.BASE_URL_REG+"WSReglement/listeReglements?ent_num="+global.currentEnt+"&start="+this.state.start)
         .then(response => response.json())
         .then((responseJson)=> {
           this.setState({
@@ -34,9 +32,9 @@ export default class FacturesImpayees extends Component {
     }
 
     prev = () => {
-        const GLOBAL = require('../../Global');
+        const GLOBAL = require('../../../Global');
         this.setState({ fetching_from_server_prev: true , start : this.state.start - 20}, () => {
-        fetch(GLOBAL.BASE_URL_REG+"WSFacture/listeFactures?type=2&ent_num="+global.currentEnt+"&etat=0&start="+this.state.start+"&search="+this.state.search)
+        fetch(GLOBAL.BASE_URL_REG+"WSReglement/listeReglements?ent_num="+global.currentEnt+"&start="+this.state.start+"&search="+this.state.search)
             .then(response => response.json())
             .then(responseJson => {
               this.setState({
@@ -51,9 +49,9 @@ export default class FacturesImpayees extends Component {
       };
   
       next = () => {
-          const GLOBAL = require('../../Global');
+          const GLOBAL = require('../../../Global');
           this.setState({ fetching_from_server_next: true , start : this.state.start + 20}, () => {
-          fetch(GLOBAL.BASE_URL_REG+"WSFacture/listeFactures?type=2&ent_num="+global.currentEnt+"&etat=0&start="+this.state.start+"&search="+this.state.search)
+          fetch(GLOBAL.BASE_URL_REG+"WSReglement/listeReglements?ent_num="+global.currentEnt+"&start="+this.state.start+"&search="+this.state.search)
               .then(response => response.json())
               .then(responseJson => {
                 this.setState({
@@ -69,9 +67,9 @@ export default class FacturesImpayees extends Component {
 
       _search = search => {
         this.setState({ search:search });
-        const GLOBAL = require('../../Global');
+        const GLOBAL = require('../../../Global');
           this.setState({start : 0}, () => {
-          fetch(GLOBAL.BASE_URL_REG+"WSFacture/listeFactures?type=2&ent_num="+global.currentEnt+"&etat=0&start="+this.state.start+"&search="+search)
+          fetch(GLOBAL.BASE_URL_REG+"WSReglement/listeReglements?ent_num="+global.currentEnt+"&start="+this.state.start+"&search="+search)
               .then(response => response.json())
               .then(responseJson => {
                 this.setState({
@@ -84,43 +82,40 @@ export default class FacturesImpayees extends Component {
         });
       };
 
-      _openMail(clt_mail){
-        Linking.openURL('mailto:'+clt_mail)
+      _alertIndex(data) {
+        Alert.alert(data);
       }
   
-      _voirFacture(data){
-        Actions.facture({fac_id: data})
-      }
-  
-      _call(number){
-        if(number!==''){
-          const args = {
-            number: number, // String value with the number to call
-            prompt: false // Optional boolean property. Determines if the user should be prompt prior to the call 
-          }
-          call(args).catch(console.error)
+    _voir(data){
+    Actions.reglement({regc_id: data})
+    }
+
+    style(data){
+      if(data.reg_erreur!=null){
+        if(data.reg_erreur.length == 0){
+            return {
+                margin: 6 ,textAlign:'center'
+            }           
         }else{
-          this._alertIndex('Aucun numero de telephone fourni')
+            return {
+                margin: 6 ,textAlign:'center',color:'red'
+            } 
         }
       }
-
-	    render() {
+    }
+  
+	render() {
         const state = this.state;
-        const element = (clt_tel,fac_id,clt_mail) => (         
+       
+        const element = (regc_id) => (         
             <View style={styles.action}>
-                 <TouchableOpacity onPress={() => this._voirFacture(fac_id)}>
-                <Icon type='ionicon' name='md-eye'/>
-                </TouchableOpacity>
-                <TouchableOpacity style={{marginLeft:5}} onPress={() => this._openMail(clt_mail)}>
-                <Icon name='mail'/>
-                </TouchableOpacity>
-                <TouchableOpacity style={{marginLeft:5}} onPress={() => this._call(clt_tel)}>
-                    <Icon  name='call'/> 
+                <TouchableOpacity onPress={() => this._voir(regc_id)}>
+                    <Icon type='ionicon' name='md-eye'/>
                 </TouchableOpacity>
             </View>         
         );
 
-        return(
+        return(           
             <ScrollView >
             <View style={styles.container}>
                 <SearchBar
@@ -128,17 +123,16 @@ export default class FacturesImpayees extends Component {
                     onChangeText={this._search}
                     value={this.state.search}
                 />
-                <Table borderStyle={{borderColor: 'transparent'}}>
-                <Row widthArr={[80,65,75,110,80]} data={state.tableHead} style={styles.head} textStyle={styles.text}/>
+                <Table borderStyle={{borderColor: '#f9f9f9'}} style={{marginTop:10}}>
+                <Row widthArr={[80,65,105,105,60]} data={state.tableHead} style={styles.head} textStyle={styles.textHead}/>
                 {
                     state.tableData.map((rowData, index) => (
                     <TableWrapper key={index} style={styles.row}  > 
-                        <Cell width={80} key={0} data={rowData.clt_societe} textStyle={styles.text}/>
-                        <Cell width={65} key={1} data={rowData.fac_numero} textStyle={styles.text}/>
-                        {rowData.date_limite_payement == null && rowData.fac_datelimitepaiement == null ? (
-                        <Cell width={75} key={2} data={'-'} textStyle={styles.text}/>) : rowData.date_limite_payement != null ?  <Cell key={2}  width={75} data={rowData.date_limite_payement} textStyle={styles.text}/> : <Cell  width={75} key={2} data={rowData.fac_datelimitepaiement} textStyle={styles.text}/>}   
-                        <Cell width={110}  key={3} data={rowData.reste} textStyle={styles.text}/>      
-                        <Cell width={80}  key={4} data={ element(rowData.clt_tel,rowData.fac_id,rowData.clt_mail) } textStyle={styles.text} />
+                        <Cell width={80} key={0} data={rowData.clt_societe} textStyle={this.style(rowData)}/>
+                        <Cell width={65} key={1} data={rowData.facture} textStyle={this.style(rowData)}/>
+                        <Cell width={105}  key={2} data={rowData.regc_montant} textStyle={this.style(rowData)}/>     
+                        <Cell width={105}  key={3} data={rowData.montant_disponible} textStyle={this.style(rowData)}/>   
+                        <Cell width={60}  key={4} data={ element(rowData.regc_id) } />                  
                     </TableWrapper>
                     ))
                 }
@@ -149,7 +143,7 @@ export default class FacturesImpayees extends Component {
                     activeOpacity={0.9}
                     onPress={() => this.prev()}
                     style={styles.loadMoreBtn}>
-                    <Text style={styles.btnText}>Precedent</Text>
+                    <Text style={styles.btnText}>Précédent</Text>
                     {this.state.fetching_from_server_prev ? (
                     <ActivityIndicator color="white" style={{ marginLeft: 8 }} />
                     ) : null}
@@ -173,10 +167,12 @@ export default class FacturesImpayees extends Component {
 
 const styles = StyleSheet.create({
     container: { flex: 1, backgroundColor: '#fff' },
-    head: { height: 40, backgroundColor: '#808B97' },
-    row: { flexDirection: 'row', backgroundColor: '#FFF1C1' },
+    head: { height: 40, backgroundColor: '#000'},
+    textHead: { margin: 6,color:'#fff' },
     text: { margin: 6 ,textAlign:'center'},
-    action: { width: 58, height: 18,flexDirection: 'row' },
+    row: { flexDirection: 'row', backgroundColor: '#fff' },
+    textred: { margin: 6 ,textAlign:'center',color:'red'},
+    action: { width: 58, height: 18,flexDirection: 'row',alignItems:'center',justifyContent  : 'center' },
     list:{paddingVertical: 4, margin: 5,backgroundColor: "#fff"},
     footer: {
       padding: 10,
@@ -186,7 +182,7 @@ const styles = StyleSheet.create({
     },
     loadMoreBtn: {
       padding: 10,
-      backgroundColor: '#800000',
+      backgroundColor: '#13b5b4',
       borderRadius: 4,
       flexDirection: 'row',
       justifyContent: 'center',
@@ -199,3 +195,5 @@ const styles = StyleSheet.create({
       textAlign: 'center',
     }
   });
+
+  const style = styles.text;

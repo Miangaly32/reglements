@@ -6,7 +6,7 @@ import call from 'react-native-phone-call';
 import {Actions} from 'react-native-router-flux';
 import { Linking } from 'react-native';
 
-export default class Factures extends Component {
+export default class FacturesImpayees extends Component {
 
     constructor(props) {
         super(props);
@@ -18,11 +18,12 @@ export default class Factures extends Component {
           start :0,
           search: ''
         }
+        global.currentScreenIndex = 1;
     }
 
     componentDidMount(){
-        const GLOBAL = require('../../Global');
-        fetch(GLOBAL.BASE_URL_REG+"WSFacture/listeFactures?ent_num="+global.currentEnt+"&start="+this.state.start)
+        const GLOBAL = require('../../../Global');
+        fetch(GLOBAL.BASE_URL_REG+"WSFacture/listeFactures?type=1&ent_num="+global.currentEnt+"&etat=0&start="+this.state.start)
         .then(response => response.json())
         .then((responseJson)=> {
           this.setState({
@@ -33,9 +34,9 @@ export default class Factures extends Component {
     }
 
     prev = () => {
-        const GLOBAL = require('../../Global');
+        const GLOBAL = require('../../../Global');
         this.setState({ fetching_from_server_prev: true , start : this.state.start - 20}, () => {
-        fetch(GLOBAL.BASE_URL_REG+"WSFacture/listeFactures?ent_num="+global.currentEnt+"&start="+this.state.start+"&search="+this.state.search)
+        fetch(GLOBAL.BASE_URL_REG+"WSFacture/listeFactures?type=1&ent_num="+global.currentEnt+"&etat=0&start="+this.state.start+"&search="+this.state.search)
             .then(response => response.json())
             .then(responseJson => {
               this.setState({
@@ -50,9 +51,9 @@ export default class Factures extends Component {
       };
   
       next = () => {
-          const GLOBAL = require('../../Global');
+          const GLOBAL = require('../../../Global');
           this.setState({ fetching_from_server_next: true , start : this.state.start + 20}, () => {
-          fetch(GLOBAL.BASE_URL_REG+"WSFacture/listeFactures?ent_num="+global.currentEnt+"&start="+this.state.start+"&search="+this.state.search)
+          fetch(GLOBAL.BASE_URL_REG+"WSFacture/listeFactures?type=1&ent_num="+global.currentEnt+"&etat=0&start="+this.state.start+"&search="+this.state.search)
               .then(response => response.json())
               .then(responseJson => {
                 this.setState({
@@ -68,9 +69,9 @@ export default class Factures extends Component {
 
       _search = search => {
         this.setState({ search:search });
-        const GLOBAL = require('../../Global');
+        const GLOBAL = require('../../../Global');
           this.setState({start : 0}, () => {
-          fetch(GLOBAL.BASE_URL_REG+"WSFacture/listeFactures?ent_num="+global.currentEnt+"&start="+this.state.start+"&search="+search)
+          fetch(GLOBAL.BASE_URL_REG+"WSFacture/listeFactures?type=1&ent_num="+global.currentEnt+"&etat=0&start="+this.state.start+"&search="+search)
               .then(response => response.json())
               .then(responseJson => {
                 this.setState({
@@ -108,13 +109,13 @@ export default class Factures extends Component {
         const element = (clt_tel,fac_id,clt_mail) => (         
             <View style={styles.action}>
                  <TouchableOpacity onPress={() => this._voirFacture(fac_id)}>
-                <Icon type='ionicon' name='md-eye'/>
+                <Icon type='ionicon' name='md-eye' />
                 </TouchableOpacity>
                 <TouchableOpacity style={{marginLeft:5}} onPress={() => this._openMail(clt_mail)}>
-                <Icon name='mail'/>
+                <Icon type='ionicon' name='md-mail' color='red' />
                 </TouchableOpacity>
                 <TouchableOpacity style={{marginLeft:5}} onPress={() => this._call(clt_tel)}>
-                    <Icon  name='call'/> 
+                    <Icon type='ionicon' name='md-call' color='green' /> 
                  </TouchableOpacity>
             </View>         
         );
@@ -127,8 +128,8 @@ export default class Factures extends Component {
                     onChangeText={this._search}
                     value={this.state.search}
                 />
-                <Table borderStyle={{borderColor: 'transparent'}}>
-                <Row widthArr={[80,65,75,110,80]} data={state.tableHead} style={styles.head} textStyle={styles.text}/>
+                <Table borderStyle={{borderColor: '#f9f9f9'}}>
+                <Row widthArr={[80,65,75,110,80]} data={state.tableHead} style={styles.head} textStyle={styles.textHead}/>
                 {
                     state.tableData.map((rowData, index) => (
                     <TableWrapper key={index} style={styles.row}  > 
@@ -172,9 +173,10 @@ export default class Factures extends Component {
 
 const styles = StyleSheet.create({
     container: { flex: 1, backgroundColor: '#fff' },
-    head: { height: 40, backgroundColor: '#808B97' },
-    row: { flexDirection: 'row', backgroundColor: '#FFF1C1' },
+    head: { height: 40, backgroundColor: '#000', },
+    textHead: { margin: 6,color:'#fff' },
     text: { margin: 6 ,textAlign:'center'},
+    row: { flexDirection: 'row', backgroundColor: '#fff' },
     action: { width: 58, height: 18,flexDirection: 'row' },
     list:{paddingVertical: 4, margin: 5,backgroundColor: "#fff"},
     footer: {
