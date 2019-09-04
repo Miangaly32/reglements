@@ -31,7 +31,7 @@ export default class Routes extends Component {
         });
         AsyncStorage.getItem('ent_default').then((ent_default) => {
             this.setState({ isLoaded: true })
-            if( ent_default !== null){
+            if( global.currentEnt  == null && ent_default !== null){
                 global.currentEnt = ent_default
             }
         });

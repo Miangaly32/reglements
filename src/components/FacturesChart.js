@@ -16,10 +16,10 @@ class FacturesChart extends React.PureComponent {
 
     componentDidMount(){
         AsyncStorage.getItem('ent_default').then((ent_default) => {
-            if( ent_default !== null){
+            if( global.currentEnt  == null && ent_default !== null){
                 global.currentEnt = ent_default
             }
-
+            
             const GLOBAL = require('../../Global');
             fetch(GLOBAL.BASE_URL_REG+"WSFacture/factureChart?ent_num="+global.currentEnt)
             .then(response => response.json())

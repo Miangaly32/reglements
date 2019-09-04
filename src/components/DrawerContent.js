@@ -158,7 +158,7 @@ export default class DrawerContent extends Component {
                                     style={{
                                         fontSize: 15,marginLeft: 20,color : global.currentEnt === item.ent_num ? '#fff' : '#000'
                                     }}
-                                    onPress={() => { global.currentEnt = item.ent_num ;  this._navigate('accueil') }}>
+                                    onPress={() => { global.currentEnt = item.ent_num ; this._navigate('accueil') }}>
                                     {item.ent_raisonsocial}
                                 </Text>
                             </View>

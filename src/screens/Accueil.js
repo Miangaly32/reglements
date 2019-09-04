@@ -28,9 +28,10 @@ export default class Accueil extends Component {
 
     componentDidMount(){
         AsyncStorage.getItem('ent_default').then((ent_default) => {
-            if( ent_default !== null){
+            if( global.currentEnt  == null && ent_default !== null){
                 global.currentEnt = ent_default
-
+            }
+            if(global.currentEnt !== null){
                 const GLOBAL = require('../../Global');
                 fetch(GLOBAL.BASE_URL_REG+"WSFacture/dashboard?ent_num="+global.currentEnt)
                 .then(response => response.json())
